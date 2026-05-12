@@ -1,0 +1,23 @@
+"""
+Project requirements and dependencies.
+"""
+
+# MQTT and ThingsBoard
+paho-mqtt>=1.6.0
+
+# Modbus TCP
+pymodbus>=3.0.0
+
+# Async/concurrent utilities
+aiofiles>=0.8.0
+asyncio-timeout>=4.0.0
+
+# Logging and monitoring
+python-json-logger>=2.0.0
+
+# Development
+pytest>=7.0.0
+pytest-asyncio>=0.20.0
+black>=22.0.0
+flake8>=4.0.0
+mypy>=0.950
