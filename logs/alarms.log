@@ -1,2 +1,31 @@
 {"asctime": "2026-05-14 10:10:33,026", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: ModbusClientMixin.read_input_registers() got an unexpected keyword argument 'slave'"}
 {"asctime": "2026-05-14 10:12:30,184", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: 'TimerManager' object has no attribute 'tick'"}
+{"asctime": "2026-05-14 10:27:44,832", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:28:20,682", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:29:04,949", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:30:07,106", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:42:34,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:08,744", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:12,115", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:13,550", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:17,913", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:20,162", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:26,957", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:29,141", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:30,076", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:35,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:48,765", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:50,569", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:03,286", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:05,521", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:09,948", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 11:09:18,437", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:09:44,955", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:10:44,498", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:26,964", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:42,773", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:45,022", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:12:08,155", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:12:27,817", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:18:18,705", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:18:27,741", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}

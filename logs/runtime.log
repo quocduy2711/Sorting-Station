@@ -73,3 +73,395 @@
 {"asctime": "2026-05-14 10:19:57,248", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
 {"asctime": "2026-05-14 10:20:39,299", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: IDLE -> STARTING"}
 {"asctime": "2026-05-14 10:20:39,806", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STARTING -> RUNNING"}
+{"asctime": "2026-05-14 10:26:47,005", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:26:47,114", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:26:47,131", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:26:47,193", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:26:47,193", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:26:47,193", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:26:47,193", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:26:47,193", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:26:47,194", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:26:48,143", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:26:48,252", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:26:48,253", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnected (attempt #1)"}
+{"asctime": "2026-05-14 10:26:49,206", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:26:49,222", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnected (#1)"}
+{"asctime": "2026-05-14 10:26:50,207", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:27:37,296", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: IDLE -> STARTING"}
+{"asctime": "2026-05-14 10:27:37,806", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STARTING -> RUNNING"}
+{"asctime": "2026-05-14 10:27:42,650", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=3)"}
+{"asctime": "2026-05-14 10:27:42,651", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1000, vision_id=3, sorter=0, Circle/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:27:42,651", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1000 (Circle/Blue) \u2192 Sorter 2"}
+{"asctime": "2026-05-14 10:27:42,651", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 2"}
+{"asctime": "2026-05-14 10:27:42,651", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 2"}
+{"asctime": "2026-05-14 10:27:44,832", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:27:44,832", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:27:48,173", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 2"}
+{"asctime": "2026-05-14 10:27:48,173", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1000, vision_id=3, sorter=2, Circle/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:27:48,173", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:28:18,749", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=3)"}
+{"asctime": "2026-05-14 10:28:18,750", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1001, vision_id=3, sorter=0, Circle/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:28:18,750", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1001 (Circle/Blue) \u2192 Sorter 2"}
+{"asctime": "2026-05-14 10:28:18,750", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 2"}
+{"asctime": "2026-05-14 10:28:18,750", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 2"}
+{"asctime": "2026-05-14 10:28:20,682", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:28:20,682", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:28:24,259", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 2"}
+{"asctime": "2026-05-14 10:28:24,260", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1001, vision_id=3, sorter=2, Circle/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:28:24,260", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:28:27,158", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:28:27,158", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1002, vision_id=5, sorter=0, Complex/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:28:27,158", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1002 (Complex/Blue) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:28:27,158", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:28:27,158", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:28:32,673", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:28:32,673", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1002, vision_id=5, sorter=3, Complex/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:28:32,673", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:28:37,258", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:28:37,259", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1003, vision_id=2, sorter=0, Flat/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:28:37,259", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1003 (Flat/Green) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:28:37,259", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:28:37,259", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:28:42,775", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:28:42,775", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1003, vision_id=2, sorter=1, Flat/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:28:42,775", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:28:44,741", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:28:44,741", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1004, vision_id=4, sorter=0, Circle/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:28:44,741", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1004 (Circle/Green) \u2192 Sorter 2"}
+{"asctime": "2026-05-14 10:28:44,741", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 2"}
+{"asctime": "2026-05-14 10:28:44,741", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 2"}
+{"asctime": "2026-05-14 10:28:50,257", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 2"}
+{"asctime": "2026-05-14 10:28:50,257", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1004, vision_id=4, sorter=2, Circle/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:28:50,257", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:28:59,896", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:28:59,896", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1005, vision_id=4, sorter=0, Circle/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:28:59,897", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1005 (Circle/Green) \u2192 Sorter 2"}
+{"asctime": "2026-05-14 10:28:59,897", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 2"}
+{"asctime": "2026-05-14 10:28:59,897", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 2"}
+{"asctime": "2026-05-14 10:29:04,949", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:29:04,949", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:29:05,413", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 2"}
+{"asctime": "2026-05-14 10:29:05,413", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1005, vision_id=4, sorter=2, Circle/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:29:05,413", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:29:07,381", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=6)"}
+{"asctime": "2026-05-14 10:29:07,382", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1006, vision_id=6, sorter=0, Complex/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:29:07,382", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1006 (Complex/Green) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:29:07,382", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:29:07,382", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:29:12,898", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:29:12,898", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1006, vision_id=6, sorter=3, Complex/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:29:12,898", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:29:21,098", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:29:21,098", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1007, vision_id=1, sorter=0, Flat/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:29:21,098", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1007 (Flat/Blue) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:29:21,098", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:29:21,098", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:29:26,615", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:29:26,615", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1007, vision_id=1, sorter=1, Flat/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:29:26,615", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:30:04,862", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=6)"}
+{"asctime": "2026-05-14 10:30:04,863", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1008, vision_id=6, sorter=0, Complex/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:30:04,863", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1008 (Complex/Green) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:30:04,863", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:30:04,863", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:30:07,106", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=3)"}
+{"asctime": "2026-05-14 10:30:07,106", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:30:10,376", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:30:10,376", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1008, vision_id=6, sorter=3, Complex/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:30:10,376", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:42:32,682", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:42:32,682", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1009, vision_id=2, sorter=0, Flat/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:42:32,683", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1009 (Flat/Green) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:42:32,683", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:42:32,683", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:42:34,922", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:42:34,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:42:38,206", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:42:38,206", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1009, vision_id=2, sorter=1, Flat/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:42:38,206", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:42:43,025", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: RUNNING -> EMERGENCY_STOP"}
+{"asctime": "2026-05-14 10:43:04,321", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: EMERGENCY_STOP -> STOPPED"}
+{"asctime": "2026-05-14 10:43:06,000", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STOPPED -> STARTING"}
+{"asctime": "2026-05-14 10:43:06,511", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STARTING -> RUNNING"}
+{"asctime": "2026-05-14 10:43:08,621", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:43:08,622", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1010, vision_id=1, sorter=0, Flat/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:43:08,622", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1010 (Flat/Blue) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:43:08,622", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:43:08,622", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:43:08,743", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:43:08,744", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:12,114", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:43:12,115", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:13,550", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=3)"}
+{"asctime": "2026-05-14 10:43:13,550", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:14,143", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:43:14,143", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1010, vision_id=1, sorter=1, Flat/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:43:14,143", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:43:15,735", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:43:15,735", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1011, vision_id=5, sorter=0, Complex/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:43:15,735", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1011 (Complex/Blue) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:43:15,736", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:43:15,736", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:43:17,913", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:43:17,913", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:20,162", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=6)"}
+{"asctime": "2026-05-14 10:43:20,162", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:21,249", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:43:21,250", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1011, vision_id=5, sorter=3, Complex/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:43:21,250", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:43:24,662", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:43:24,663", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1012, vision_id=4, sorter=0, Circle/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:43:24,663", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1012 (Circle/Green) \u2192 Sorter 2"}
+{"asctime": "2026-05-14 10:43:24,663", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 2"}
+{"asctime": "2026-05-14 10:43:24,664", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 2"}
+{"asctime": "2026-05-14 10:43:26,957", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:43:26,957", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:29,141", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=4)"}
+{"asctime": "2026-05-14 10:43:29,141", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:30,075", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=6)"}
+{"asctime": "2026-05-14 10:43:30,076", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:30,166", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 2"}
+{"asctime": "2026-05-14 10:43:30,166", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1012, vision_id=4, sorter=2, Circle/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:43:30,166", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:43:33,002", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=6)"}
+{"asctime": "2026-05-14 10:43:33,003", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1013, vision_id=6, sorter=0, Complex/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:43:33,003", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1013 (Complex/Green) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:43:33,003", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:43:33,003", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:43:35,923", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:43:35,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:38,513", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:43:38,513", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1013, vision_id=6, sorter=3, Complex/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:43:38,513", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:43:45,093", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:43:45,093", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1014, vision_id=2, sorter=0, Flat/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:43:45,093", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1014 (Flat/Green) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:43:45,093", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:43:45,093", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:43:48,765", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:43:48,765", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:50,569", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:43:50,569", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:43:50,614", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:43:50,614", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1014, vision_id=2, sorter=1, Flat/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:43:50,614", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:44:00,480", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:44:00,480", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1015, vision_id=2, sorter=0, Flat/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:44:00,480", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1015 (Flat/Green) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:44:00,481", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:44:00,481", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:44:03,285", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:44:03,286", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:05,521", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=1)"}
+{"asctime": "2026-05-14 10:44:05,521", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:06,001", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:44:06,001", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1015, vision_id=2, sorter=1, Flat/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:44:06,001", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:44:07,703", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:44:07,703", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1016, vision_id=5, sorter=0, Complex/Blue, state=CREATED)"}
+{"asctime": "2026-05-14 10:44:07,704", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1016 (Complex/Blue) \u2192 Sorter 3"}
+{"asctime": "2026-05-14 10:44:07,704", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 3"}
+{"asctime": "2026-05-14 10:44:07,704", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 3"}
+{"asctime": "2026-05-14 10:44:09,948", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=5)"}
+{"asctime": "2026-05-14 10:44:09,948", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
+{"asctime": "2026-05-14 10:44:13,213", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 3"}
+{"asctime": "2026-05-14 10:44:13,214", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1016, vision_id=5, sorter=3, Complex/Blue, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:44:13,214", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 10:44:15,924", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product detected (vision_id=2)"}
+{"asctime": "2026-05-14 10:44:15,924", "name": "control.product_tracking", "levelname": "INFO", "message": "Product created: Product(uid=1017, vision_id=2, sorter=0, Flat/Green, state=CREATED)"}
+{"asctime": "2026-05-14 10:44:15,924", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: classified product 1017 (Flat/Green) \u2192 Sorter 1"}
+{"asctime": "2026-05-14 10:44:15,925", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Starting sort sequence for sorter 1"}
+{"asctime": "2026-05-14 10:44:15,925", "name": "control.state_machine", "levelname": "INFO", "message": "Activating sorter 1"}
+{"asctime": "2026-05-14 10:44:21,437", "name": "control.state_machine", "levelname": "INFO", "message": "Deactivating sorter 1"}
+{"asctime": "2026-05-14 10:44:21,437", "name": "control.product_tracking", "levelname": "INFO", "message": "Product completed: Product(uid=1017, vision_id=2, sorter=1, Flat/Green, state=COMPLETE)"}
+{"asctime": "2026-05-14 10:44:21,437", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService: product sort complete"}
+{"asctime": "2026-05-14 11:07:53,032", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 11:07:53,135", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "control.state_machine", "levelname": "INFO", "message": "StateMachine handlers registered"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 11:07:53,152", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 11:07:54,153", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 11:07:54,260", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 11:07:54,261", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnected (attempt #1)"}
+{"asctime": "2026-05-14 11:07:55,153", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 11:07:55,167", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnected (#1)"}
+{"asctime": "2026-05-14 11:07:56,180", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 11:08:59,711", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: IDLE \u2192 STARTING"}
+{"asctime": "2026-05-14 11:09:00,213", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STARTING \u2192 RUNNING"}
+{"asctime": "2026-05-14 11:09:00,213", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:05,016", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:05,016", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:05,016", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:06,765", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:06,765", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:07,026", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:07,275", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:07,477", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:07,477", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:07,477", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:08,825", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:08,825", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:09,336", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:09,478", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:09,542", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=2 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:09,542", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:09,542", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:11,010", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:11,011", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:11,522", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:11,552", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:11,757", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:11,757", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:11,757", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:13,509", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:13,509", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:13,758", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:14,021", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:14,224", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=2 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:14,225", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:14,225", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:15,569", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:15,569", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:16,079", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:16,236", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:16,282", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=5 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:09:16,282", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:09:16,283", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:18,295", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:18,437", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:09:22,315", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:09:22,315", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:22,829", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:40,396", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:09:40,396", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:09:40,396", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:41,950", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:09:41,951", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:42,400", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:42,451", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:09:42,702", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=6 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:09:42,703", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:09:42,703", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:09:44,715", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:09:44,955", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:09:48,888", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:09:48,888", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:09:49,388", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:10:30,265", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:10:30,265", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:10:30,265", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:10:32,014", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:10:32,014", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:10:32,277", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:10:32,527", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:10:37,756", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=2 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:10:37,756", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:10:37,756", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:10:39,371", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:10:39,371", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:10:39,758", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:10:39,872", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:10:40,085", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=2 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:10:40,085", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:10:40,085", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:10:41,438", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:10:41,439", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:10:41,952", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:10:42,092", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:10:42,251", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=3 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:10:42,251", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:10:42,251", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:10:44,261", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:10:44,498", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:10:45,993", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:10:45,993", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:10:46,506", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:11:24,653", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=5 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:11:24,653", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:11:24,653", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:11:26,664", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:11:26,964", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:30,844", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:11:30,844", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:11:31,345", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:11:31,911", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=6 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:11:31,911", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:11:31,911", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:11:33,921", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:11:37,969", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:11:37,969", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:11:38,480", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:11:40,465", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=6 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:11:40,466", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:11:40,466", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:11:42,474", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:11:42,773", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:45,022", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:11:46,590", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:11:46,590", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:11:47,091", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:11:52,285", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=4 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:11:52,285", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:11:52,285", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:11:54,292", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:11:56,407", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:11:56,408", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:11:56,918", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:12:05,960", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=4 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:12:05,961", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:12:05,961", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:12:07,966", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:12:08,155", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:12:09,900", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:12:09,900", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:12:10,403", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:12:18,206", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=4 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:12:18,206", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:12:18,206", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:12:20,218", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:12:22,078", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:12:22,078", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:12:22,587", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:12:23,824", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=6 \u2192 Sorter 3"}
+{"asctime": "2026-05-14 11:12:23,825", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 activated"}
+{"asctime": "2026-05-14 11:12:23,825", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:12:25,831", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:12:27,817", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:12:29,809", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 3"}
+{"asctime": "2026-05-14 11:12:29,810", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 3 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:12:30,310", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:18:02,840", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=1 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:18:02,840", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:18:02,841", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:18:04,527", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:18:04,527", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:18:04,851", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:18:05,037", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:18:10,275", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=2 \u2192 Sorter 1"}
+{"asctime": "2026-05-14 11:18:10,275", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 activated"}
+{"asctime": "2026-05-14 11:18:10,275", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:18:11,774", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 1"}
+{"asctime": "2026-05-14 11:18:11,774", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 1 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:18:12,276", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:18:12,276", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:18:16,456", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=3 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:18:16,457", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:18:16,457", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:18:18,467", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:18:18,705", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:18:20,194", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:18:20,194", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:18:20,706", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}
+{"asctime": "2026-05-14 11:18:25,000", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Product detected id=4 \u2192 Sorter 2"}
+{"asctime": "2026-05-14 11:18:25,000", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 activated"}
+{"asctime": "2026-05-14 11:18:25,001", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade LOWERED"}
+{"asctime": "2026-05-14 11:18:27,010", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Stop blade RAISED \u2014 ready for next product"}
+{"asctime": "2026-05-14 11:18:27,741", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-14 11:18:28,868", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: at_exit triggered \u2014 product in remover, resetting sorter 2"}
+{"asctime": "2026-05-14 11:18:28,869", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Sorter 2 deactivated, product_in_flight=False"}
+{"asctime": "2026-05-14 11:18:29,381", "name": "control.state_machine", "levelname": "INFO", "message": "FSM: Emitter pulse \u2192 creating new product"}

@@ -33,10 +33,11 @@ class RuntimeEngine:
         self._interval_s: float = ctx.config.timing.io_scan_ms / 1000.0
         self._running: bool = False
         
-        # Button edge tracking (Stop and E-Stop are Normally Closed, so initial state is True)
+        # Button edge tracking (Stop và E-Stop là Normally Closed)
         self._last_start = False
         self._last_stop = True
         self._last_estop = True
+        self._last_at_exit = False  # at_exit là Normally Open
 
     async def initialize(self) -> bool:
         """Initialize and connect subsystems."""
@@ -64,8 +65,6 @@ class RuntimeEngine:
         # Register event handlers
         if ctx.state_machine:
             ctx.state_machine.register_handlers(ctx.event_manager)
-        if ctx.sorting_service:
-            ctx.sorting_service.register_handlers()
         if ctx.telemetry_service:
             ctx.telemetry_service.register_handlers()
         if ctx.alarm_service:
@@ -104,8 +103,16 @@ class RuntimeEngine:
                                 source="InputReader",
                                 data={"vision_id": snapshot.vision_id}
                             )
-                            
-                        # Edge trigger for buttons (Start is NO, Stop and E-Stop are NC)
+
+                        # Edge trigger for at_exit (NO — phát hiện rising edge)
+                        if snapshot.at_exit and not self._last_at_exit:
+                            ctx.event_manager.emit(
+                                SystemEvent.AT_EXIT_TRIGGERED,
+                                source="InputReader",
+                                data={},
+                            )
+
+                        # Edge trigger cho buttons (Start = NO, Stop/E-Stop = NC)
                         if snapshot.start_button and not self._last_start:
                             ctx.event_manager.emit(SystemEvent.START_BUTTON_PRESSED, source="Hardware")
                         if not snapshot.stop_button and self._last_stop:
@@ -114,7 +121,8 @@ class RuntimeEngine:
                             ctx.event_manager.emit(SystemEvent.ESTOP_ACTIVATED, source="Hardware")
                         if snapshot.estop and not self._last_estop:
                             ctx.event_manager.emit(SystemEvent.ESTOP_CLEARED, source="Hardware")
-                            
+
+                        self._last_at_exit = snapshot.at_exit
                         self._last_start = snapshot.start_button
                         self._last_stop = snapshot.stop_button
                         self._last_estop = snapshot.estop

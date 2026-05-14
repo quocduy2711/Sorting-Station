@@ -32,6 +32,9 @@ class SystemEvent(Enum):
     PRODUCT_SORT_DONE   = "PRODUCT_SORT_DONE"    # Product successfully removed from sorter
     PRODUCT_FAILED      = "PRODUCT_FAILED"       # Product processing failed
 
+    # Physical sensors
+    AT_EXIT_TRIGGERED   = "AT_EXIT_TRIGGERED"    # at_exit sensor: product fell into remover
+
     # Sorting
     SORT_COMMAND        = "SORT_COMMAND"          # Instruct FSM to activate sorter N
 

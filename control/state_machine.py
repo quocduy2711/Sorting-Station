@@ -1,129 +1,266 @@
 """
 System-level state machine.
 
-RULE: Only state machine owns outputs.
-RULE: Other modules calculate/validate but don't control outputs.
+4 luồng hoạt động chính:
+  Luồng 1: Emitter sinh 1 sản phẩm → chờ sản phẩm vào remover → sinh tiếp
+  Luồng 2: Entry conveyor → stop blade GIỮ sản phẩm → vision đọc ID
+            → Hạ stop blade 2 giây → Nâng lại đợi sản phẩm tiếp theo
+  Luồng 3: Phân loại theo vision_id → bật sorter tương ứng
+            id 1,2 → sorter1_belt + sorter1_turn
+            id 3,4 → sorter2_belt + sorter2_turn
+            id 5,6 → sorter3_belt + sorter3_turn
+  Luồng 4: at_exit → sản phẩm đã vào remover → tắt sorter → cho emitter sinh tiếp
+
+RULE: Chỉ có StateMachine được ghi OutputState.
 """
+from __future__ import annotations
+
+import asyncio
 import logging
+from typing import Optional, TYPE_CHECKING
+
 from models.system_state import SystemStateEnum, SystemState
 from models.output_state import OutputState
+from config.constants import SORT_MAP, VALID_PRODUCT_IDS
 
+if TYPE_CHECKING:
+    from control.event_manager import EventManager
 
 logger = logging.getLogger(__name__)
+
+# ── Timing constants (seconds) ─────────────────────────────────────────────────
+BLADE_OPEN_DURATION_S   = 2.0   # Thời gian mở stop blade để sản phẩm đi qua
+EMITTER_PULSE_DURATION_S = 0.2  # Thời gian bật emitter để tạo 1 sản phẩm
+SORTER_ACTIVE_TIMEOUT_S  = 15.0 # Thời gian tối đa chờ at_exit (failsafe)
 
 
 class StateMachine:
     """
-    Main finite state machine for system control.
-    
-    RULE: This is the ONLY module that directly controls OutputState.
-    
-    Other modules can:
-    - Emit events
-    - Calculate logic
-    - Validate conditions
-    
-    But only FSM sets outputs.
+    Điều phối 4 luồng hoạt động của trạm phân loại.
+
+    States:
+        IDLE          - hệ thống chờ
+        STARTING      - khởi động conveyor
+        RUNNING       - đang chạy (tất cả 4 luồng hoạt động)
+        STOPPED       - dừng
+        EMERGENCY_STOP- dừng khẩn cấp
     """
 
-    def __init__(self, system_state: SystemState, output_state: OutputState):
-        """Initialize state machine."""
+    def __init__(self, system_state: SystemState, output_state: OutputState) -> None:
         self.system_state = system_state
         self.output_state = output_state
+        self._em: Optional[EventManager] = None
 
-    def register_handlers(self, em: 'EventManager') -> None:
-        """Register to listen to system events."""
-        self._em = em
+        # Trạng thái nội bộ
+        self._product_in_flight: bool = False   # Có sản phẩm đang trên băng hay chưa
+        self._current_vision_id: int = 0        # ID sản phẩm đang xử lý
+        self._active_sorter: int = 0            # Sorter đang bật (0 = không có)
+        self._sort_task: Optional[asyncio.Task] = None
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Event Handler Registration
+    # ──────────────────────────────────────────────────────────────────────────
+
+    def register_handlers(self, em: "EventManager") -> None:
+        """Đăng ký lắng nghe các sự kiện từ EventManager."""
         from control.event_manager import SystemEvent
+        self._em = em
         em.subscribe(SystemEvent.START_BUTTON_PRESSED, self._on_start)
         em.subscribe(SystemEvent.STOP_BUTTON_PRESSED, self._on_stop)
         em.subscribe(SystemEvent.ESTOP_ACTIVATED, self._on_estop)
         em.subscribe(SystemEvent.ESTOP_CLEARED, self._on_estop_clear)
-        em.subscribe(SystemEvent.SORT_COMMAND, self._on_sort_command)
+        em.subscribe(SystemEvent.PRODUCT_DETECTED, self._on_product_detected)
+        em.subscribe(SystemEvent.AT_EXIT_TRIGGERED, self._on_at_exit)
+        logger.info("StateMachine handlers registered")
 
-    async def _on_start(self, event):
+    # ──────────────────────────────────────────────────────────────────────────
+    # Button handlers
+    # ──────────────────────────────────────────────────────────────────────────
+
+    async def _on_start(self, event) -> None:
         if self.system_state.state in (SystemStateEnum.IDLE, SystemStateEnum.STOPPED):
             await self.transition_to(SystemStateEnum.STARTING)
-            import asyncio
-            # Wait 500ms for conveyors to spin up before fully running
-            asyncio.create_task(self._delayed_run())
+            asyncio.create_task(self._startup_sequence(), name="startup_seq")
 
-    async def _delayed_run(self):
-        import asyncio
+    async def _startup_sequence(self) -> None:
+        """Khởi động conveyor rồi bắt đầu RUNNING + sinh sản phẩm đầu tiên."""
         await asyncio.sleep(0.5)
         if self.system_state.state == SystemStateEnum.STARTING:
             await self.transition_to(SystemStateEnum.RUNNING)
+            # Luồng 1: sinh sản phẩm đầu tiên ngay
+            await self._pulse_emitter()
 
-    async def _on_stop(self, event):
+    async def _on_stop(self, event) -> None:
         if self.system_state.state not in (SystemStateEnum.EMERGENCY_STOP, SystemStateEnum.ERROR):
             await self.transition_to(SystemStateEnum.STOPPED)
 
-    async def _on_estop(self, event):
+    async def _on_estop(self, event) -> None:
         await self.transition_to(SystemStateEnum.EMERGENCY_STOP)
 
-    async def _on_estop_clear(self, event):
+    async def _on_estop_clear(self, event) -> None:
         if self.system_state.state == SystemStateEnum.EMERGENCY_STOP:
             await self.transition_to(SystemStateEnum.STOPPED)
 
-    async def _on_sort_command(self, event):
-        sorter_id = event.data.get("sorter_id")
-        if sorter_id:
-            import asyncio
-            asyncio.create_task(self._sort_sequence(sorter_id))
+    # ──────────────────────────────────────────────────────────────────────────
+    # Luồng 2: Vision sensor phát hiện sản phẩm ở stop blade
+    # ──────────────────────────────────────────────────────────────────────────
 
-    async def _sort_sequence(self, sorter_id: int):
-        import asyncio
-        logger.info(f"FSM: Starting sort sequence for sorter {sorter_id}")
-        
-        # Lower blade
-        await self.lower_blade()
-        await self.activate_sorter(sorter_id)
-        
-        # Let product pass the blade
-        await asyncio.sleep(1.5)
-        
-        # Raise blade
-        await self.raise_blade()
-        
-        # Let product reach and clear the sorter
-        await asyncio.sleep(4.0)
-        
-        # Turn off sorter
-        await self.deactivate_sorter(sorter_id)
-        
-        # Notify sorting done
-        from control.event_manager import SystemEvent
-        if hasattr(self, '_em'):
-            self._em.emit(SystemEvent.PRODUCT_SORT_DONE, source="StateMachine")
+    async def _on_product_detected(self, event) -> None:
+        """
+        Luồng 2 + 3: Vision sensor đọc được sản phẩm đang bị chặn tại stop blade.
+
+        - Xác định sorter theo vision_id
+        - Bật sorter ngay
+        - Hạ stop blade → 2 giây → nâng lại
+        """
+        if self.system_state.state != SystemStateEnum.RUNNING:
+            return
+
+        if self._product_in_flight:
+            logger.warning("FSM: Product detected but one is already in flight — ignoring")
+            return
+
+        vision_id: int = event.data.get("vision_id", 0)
+        if vision_id not in VALID_PRODUCT_IDS:
+            logger.error(f"FSM: Invalid vision_id={vision_id}")
+            return
+
+        # Xác định sorter
+        sorter_id = SORT_MAP[vision_id]
+        logger.info(f"FSM: Product detected id={vision_id} → Sorter {sorter_id}")
+
+        self._product_in_flight = True
+        self._current_vision_id = vision_id
+        self._active_sorter = sorter_id
+
+        # Hủy sort task cũ nếu có
+        if self._sort_task and not self._sort_task.done():
+            self._sort_task.cancel()
+
+        # Luồng 3: bật sorter + Luồng 2: mở cổng
+        self._sort_task = asyncio.create_task(
+            self._blade_and_sorter_sequence(sorter_id),
+            name=f"sort_seq_s{sorter_id}"
+        )
+
+    async def _blade_and_sorter_sequence(self, sorter_id: int) -> None:
+        """
+        Luồng 2 + 3 (tổng hợp):
+        1. Bật sorter
+        2. Hạ stop blade
+        3. Chờ 2 giây
+        4. Nâng stop blade lại
+        5. Chờ at_exit hoặc timeout failsafe
+        """
+        try:
+            # Luồng 3: bật sorter ngay
+            self._set_sorter(sorter_id, True)
+            logger.info(f"FSM: Sorter {sorter_id} activated")
+
+            # Luồng 2: hạ stop blade để sản phẩm đi qua
+            self.output_state.stop_blade = False
+            logger.info("FSM: Stop blade LOWERED")
+
+            # Chờ 2 giây
+            await asyncio.sleep(BLADE_OPEN_DURATION_S)
+
+            # Luồng 2: nâng stop blade lại để chặn sản phẩm tiếp theo
+            self.output_state.stop_blade = True
+            logger.info("FSM: Stop blade RAISED — ready for next product")
+
+            # Failsafe: nếu at_exit không đến sau SORTER_ACTIVE_TIMEOUT_S giây thì tự reset
+            await asyncio.sleep(SORTER_ACTIVE_TIMEOUT_S)
+            if self._product_in_flight:
+                logger.warning(f"FSM: Sorter {sorter_id} timeout — forcing reset")
+                await self._reset_sorter(sorter_id)
+
+        except asyncio.CancelledError:
+            logger.debug(f"FSM: Sort sequence cancelled for sorter {sorter_id}")
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Luồng 4: at_exit — sản phẩm đã rơi vào remover
+    # ──────────────────────────────────────────────────────────────────────────
+
+    async def _on_at_exit(self, event) -> None:
+        """
+        Luồng 4: Cảm biến at_exit phát hiện sản phẩm đã vào remover.
+
+        - Tắt sorter tương ứng
+        - Reset trạng thái product_in_flight
+        - Luồng 1: pulse emitter để sinh sản phẩm mới
+        """
+        if not self._product_in_flight:
+            return
+
+        sorter_id = self._active_sorter
+        logger.info(f"FSM: at_exit triggered — product in remover, resetting sorter {sorter_id}")
+
+        await self._reset_sorter(sorter_id)
+
+        # Luồng 1: sinh sản phẩm tiếp theo
+        if self.system_state.state == SystemStateEnum.RUNNING:
+            await asyncio.sleep(0.5)  # Nhỏ delay tránh double-fire
+            await self._pulse_emitter()
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # Internal helpers
+    # ──────────────────────────────────────────────────────────────────────────
+
+    async def _pulse_emitter(self) -> None:
+        """Luồng 1: Bật emitter tạo 1 sản phẩm rồi tắt ngay."""
+        if self.system_state.state != SystemStateEnum.RUNNING:
+            return
+        logger.info("FSM: Emitter pulse → creating new product")
+        self.output_state.emitter = True
+        await asyncio.sleep(EMITTER_PULSE_DURATION_S)
+        self.output_state.emitter = False
+
+    def _set_sorter(self, sorter_id: int, active: bool) -> None:
+        """Bật/tắt belt + turn của sorter chỉ định."""
+        if sorter_id == 1:
+            self.output_state.sorter1_belt = active
+            self.output_state.sorter1_turn = active
+        elif sorter_id == 2:
+            self.output_state.sorter2_belt = active
+            self.output_state.sorter2_turn = active
+        elif sorter_id == 3:
+            self.output_state.sorter3_belt = active
+            self.output_state.sorter3_turn = active
+
+    async def _reset_sorter(self, sorter_id: int) -> None:
+        """Luồng 4: Tắt sorter và reset tracking state."""
+        self._set_sorter(sorter_id, False)
+        self._product_in_flight = False
+        self._current_vision_id = 0
+        self._active_sorter = 0
+        logger.info(f"FSM: Sorter {sorter_id} deactivated, product_in_flight=False")
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # FSM State Transitions
+    # ──────────────────────────────────────────────────────────────────────────
 
     async def transition_to(self, new_state: SystemStateEnum) -> None:
-        """
-        Transition to a new system state.
-        
-        Updates output configuration based on new state.
-        
-        Args:
-            new_state: Target state
-        """
+        """Chuyển trạng thái và cập nhật outputs tương ứng."""
         old_state = self.system_state.state
-        
         if old_state == new_state:
-            return  # No change
-        
-        logger.info(f"State transition: {old_state.value} -> {new_state.value}")
+            return
+
+        logger.info(f"State transition: {old_state.value} → {new_state.value}")
         self.system_state.set_state(new_state)
-        
-        # Update outputs based on new state
         await self._configure_outputs_for_state(new_state)
 
+        # Emit FSM state change event
+        if self._em:
+            from control.event_manager import SystemEvent
+            self._em.emit(
+                SystemEvent.FSM_STATE_CHANGED,
+                source="StateMachine",
+                data={"old_state": old_state.value, "new_state": new_state.value},
+            )
+
     async def _configure_outputs_for_state(self, state: SystemStateEnum) -> None:
-        """
-        Configure outputs appropriate for the given state.
-        
-        RULE: Output configuration centralized here.
-        """
+        """Cấu hình outputs khi vào trạng thái mới."""
         if state == SystemStateEnum.IDLE:
-            # All off except stop blade
             self.output_state.emitter = False
             self.output_state.entry_conveyor = False
             self.output_state.exit_conveyor = False
@@ -131,140 +268,60 @@ class StateMachine:
             self._disable_all_sorters()
 
         elif state == SystemStateEnum.STARTING:
-            # Initialize conveyors
+            # Bật conveyor, nâng stop blade
             self.output_state.entry_conveyor = True
             self.output_state.exit_conveyor = True
             self.output_state.stop_blade = True
 
         elif state == SystemStateEnum.RUNNING:
-            # Conveyors running
+            # Conveyor chạy, stop blade UP (sẵn sàng chặn sản phẩm)
             self.output_state.entry_conveyor = True
-            self.output_state.exit_conveyor = True
-            self.output_state.emitter = False  # Will pulse separately
-
-        elif state == SystemStateEnum.WAITING_CLEAR_ZONE:
-            # Blade is up, conveyors stopped
-            self.output_state.entry_conveyor = False
-            self.output_state.exit_conveyor = False
-            self.output_state.stop_blade = True
-
-        elif state == SystemStateEnum.READING_ID:
-            # Hold product at blade, exit conveyor ready
-            self.output_state.entry_conveyor = False
             self.output_state.exit_conveyor = True
             self.output_state.stop_blade = True
 
-        elif state == SystemStateEnum.MOVING_TO_SORTER:
-            # Both conveyors running
-            self.output_state.entry_conveyor = True
-            self.output_state.exit_conveyor = True
-
-        elif state == SystemStateEnum.SORTING:
-            # Sorter active (controls its own outputs)
-            self.output_state.entry_conveyor = False
-            self.output_state.exit_conveyor = False
-
-        elif state == SystemStateEnum.STOPPED or state == SystemStateEnum.ERROR:
-            # Safe state
+        elif state in (SystemStateEnum.STOPPED, SystemStateEnum.ERROR):
             self.output_state.entry_conveyor = False
             self.output_state.exit_conveyor = False
             self.output_state.stop_blade = True
             self._disable_all_sorters()
+            self._product_in_flight = False
+            self._active_sorter = 0
 
         elif state == SystemStateEnum.EMERGENCY_STOP:
-            # CRITICAL: Failsafe
+            # Tắt tất cả ngay lập tức
             self.output_state.reset_all()
+            self._product_in_flight = False
+            self._active_sorter = 0
+            if self._sort_task and not self._sort_task.done():
+                self._sort_task.cancel()
 
     def _disable_all_sorters(self) -> None:
-        """Turn off all sorter outputs."""
-        self.output_state.sorter1_belt = False
-        self.output_state.sorter1_turn = False
-        self.output_state.sorter2_belt = False
-        self.output_state.sorter2_turn = False
-        self.output_state.sorter3_belt = False
-        self.output_state.sorter3_turn = False
-        self.output_state.remover1 = False
-        self.output_state.remover2 = False
-        self.output_state.remover3 = False
+        """Tắt tất cả sorter outputs."""
+        for attr in [
+            "sorter1_belt", "sorter1_turn",
+            "sorter2_belt", "sorter2_turn",
+            "sorter3_belt", "sorter3_turn",
+            "remover1", "remover2", "remover3",
+        ]:
+            setattr(self.output_state, attr, False)
 
-    async def activate_sorter(self, sorter_id: int) -> None:
-        """
-        Activate a specific sorter.
-        
-        Args:
-            sorter_id: Sorter number (1, 2, or 3)
-        """
-        logger.info(f"Activating sorter {sorter_id}")
-        
-        if sorter_id == 1:
-            self.output_state.sorter1_belt = True
-            self.output_state.sorter1_turn = True
-        elif sorter_id == 2:
-            self.output_state.sorter2_belt = True
-            self.output_state.sorter2_turn = True
-        elif sorter_id == 3:
-            self.output_state.sorter3_belt = True
-            self.output_state.sorter3_turn = True
-
-    async def deactivate_sorter(self, sorter_id: int) -> None:
-        """
-        Deactivate a specific sorter.
-        
-        Args:
-            sorter_id: Sorter number (1, 2, or 3)
-        """
-        logger.info(f"Deactivating sorter {sorter_id}")
-        
-        if sorter_id == 1:
-            self.output_state.sorter1_belt = False
-            self.output_state.sorter1_turn = False
-        elif sorter_id == 2:
-            self.output_state.sorter2_belt = False
-            self.output_state.sorter2_turn = False
-        elif sorter_id == 3:
-            self.output_state.sorter3_belt = False
-            self.output_state.sorter3_turn = False
-
-    async def raise_blade(self) -> None:
-        """Raise stop blade."""
-        self.output_state.stop_blade = True
-        logger.debug("Blade raised")
-
-    async def lower_blade(self) -> None:
-        """Lower stop blade."""
-        self.output_state.stop_blade = False
-        logger.debug("Blade lowered")
-
-    async def pulse_emitter(self, pulse_duration_ms: int) -> None:
-        """
-        Pulse emitter for product creation.
-        
-        RULE: Emitter must pulse, not stay on.
-        
-        Args:
-            pulse_duration_ms: Duration in milliseconds
-        """
-        import asyncio
-        
-        logger.debug(f"Emitter pulse for {pulse_duration_ms}ms")
-        self.output_state.emitter = True
-        
-        await asyncio.sleep(pulse_duration_ms / 1000.0)
-        
-        self.output_state.emitter = False
-
-    def get_current_state(self) -> SystemStateEnum:
-        """Get current system state."""
-        return self.system_state.state
+    # ──────────────────────────────────────────────────────────────────────────
+    # Status helpers
+    # ──────────────────────────────────────────────────────────────────────────
 
     def is_running(self) -> bool:
-        """Check if system is in running state."""
         return self.system_state.state == SystemStateEnum.RUNNING
 
     def is_emergency_stop(self) -> bool:
-        """Check if in emergency stop."""
         return self.system_state.state == SystemStateEnum.EMERGENCY_STOP
 
-    def is_error(self) -> bool:
-        """Check if in error state."""
-        return self.system_state.state == SystemStateEnum.ERROR
+    def get_current_state(self) -> SystemStateEnum:
+        return self.system_state.state
+
+    @property
+    def product_in_flight(self) -> bool:
+        return self._product_in_flight
+
+    @property
+    def active_sorter(self) -> int:
+        return self._active_sorter
