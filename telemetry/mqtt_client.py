@@ -1,171 +1,309 @@
 """
 MQTT client for ThingsBoard communication.
-"""
-import logging
-import json
-from typing import Dict, Optional, Callable
-import paho.mqtt.client as mqtt
-from config import MQTTConfig
 
+Features:
+- Exponential backoff reconnect
+- Offline message buffer (in-memory deque, max configurable)
+- Flush offline buffer on reconnect
+- Reconnect counter for runtime metrics
+- Callbacks for connect/disconnect events (for event bus)
+"""
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import time
+from collections import deque
+from typing import Any, Callable, Deque, Dict, Optional, Tuple
+
+import paho.mqtt.client as mqtt
+
+from config.app_config import MQTTConfig, ReconnectConfig
 
 logger = logging.getLogger(__name__)
+
+# Offline message: (topic, payload_dict, qos)
+_OfflineMsg = Tuple[str, Dict[str, Any], int]
 
 
 class MQTTClient:
     """
-    MQTT client for publishing telemetry to ThingsBoard.
+    Async-compatible MQTT client with auto-reconnect and offline buffering.
+
+    RULE: publish() never raises — silently buffers when disconnected.
+    RULE: Reconnect loop runs as a background asyncio Task.
     """
 
-    def __init__(self, config: MQTTConfig):
-        """Initialize MQTT client."""
-        self.config = config
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
-        self.connected = False
-        self.last_error: Optional[str] = None
-        
-        # Callbacks
-        self.client.on_connect = self._on_connect
-        self.client.on_disconnect = self._on_disconnect
-        self.client.on_message = self._on_message
-        
-        # User callbacks
-        self.on_message_callback: Optional[Callable] = None
+    def __init__(
+        self,
+        mqtt_cfg: MQTTConfig,
+        reconnect_cfg: ReconnectConfig,
+        on_reconnect: Optional[Callable] = None,
+        on_disconnect: Optional[Callable] = None,
+    ) -> None:
+        self._cfg = mqtt_cfg
+        self._rcfg = reconnect_cfg
 
-    def _on_connect(self, client, userdata, flags, rc):
-        """MQTT connect callback."""
-        if rc == 0:
-            logger.info("MQTT connected successfully")
-            self.connected = True
-        else:
-            logger.error(f"MQTT connection failed with code {rc}")
-            self.connected = False
-            self.last_error = f"Connection failed (code {rc})"
+        self._connected: bool = False
+        self._last_error: Optional[str] = None
+        self._reconnect_count: int = 0
 
-    def _on_disconnect(self, client, userdata, rc):
-        """MQTT disconnect callback."""
-        if rc != 0:
-            logger.warning(f"MQTT disconnected unexpectedly (code {rc})")
-        self.connected = False
+        # Offline buffer
+        self._offline_buffer: Deque[_OfflineMsg] = deque(
+            maxlen=reconnect_cfg.mqtt_offline_buffer_size
+        )
 
-    def _on_message(self, client, userdata, msg):
-        """MQTT message callback."""
-        logger.debug(f"MQTT message received: {msg.topic}")
-        
-        if self.on_message_callback:
-            try:
-                payload = msg.payload.decode()
-                self.on_message_callback(msg.topic, payload)
-            except Exception as e:
-                logger.error(f"Error in message callback: {e}")
+        # External callbacks (for event bus integration)
+        self._on_reconnect: Optional[Callable] = on_reconnect
+        self._on_disconnect: Optional[Callable] = on_disconnect
+
+        # User-provided message callback
+        self._on_message_cb: Optional[Callable] = None
+
+        self._reconnect_task: Optional[asyncio.Task] = None
+
+        # Build paho client
+        self._client = mqtt.Client(
+            mqtt.CallbackAPIVersion.VERSION1,
+            clean_session=mqtt_cfg.clean_session,
+        )
+        self._client.on_connect = self._paho_on_connect
+        self._client.on_disconnect = self._paho_on_disconnect
+        self._client.on_message = self._paho_on_message
+
+    # ── Connection lifecycle ──────────────────────────────────────────────────
 
     async def connect(self) -> bool:
         """
         Connect to MQTT broker.
-        
+
         Returns:
-            True if connected successfully.
+            True if connection initiated successfully.
         """
         try:
-            if self.config.ca_certs:
-                self.client.tls_set(
-                    ca_certs=self.config.ca_certs,
-                    certfile=None,
-                    keyfile=None,
-                    cert_reqs=mqtt.ssl.CERT_REQUIRED,
-                    tls_version=self.config.tls_version or mqtt.ssl.PROTOCOL_TLSv1_2,
-                    ciphers=None
+            if self._cfg.ca_certs:
+                import ssl
+                self._client.tls_set(
+                    ca_certs=self._cfg.ca_certs,
+                    cert_reqs=ssl.CERT_REQUIRED,
+                    tls_version=ssl.PROTOCOL_TLS_CLIENT,
                 )
 
-            self.client.username_pw_set(self.config.access_token, password="")
-            self.client.connect(self.config.broker, self.config.port, keepalive=60)
-            
-            # Start network loop
-            self.client.loop_start()
-            
-            logger.info(f"MQTT connecting to {self.config.broker}:{self.config.port}")
-            return True
+            # ThingsBoard: access_token as username, empty password
+            token = self._cfg.access_token or self._cfg.username
+            password = self._cfg.password if self._cfg.password else None
+            self._client.username_pw_set(token, password=password)
 
-        except Exception as e:
-            self.connected = False
-            self.last_error = f"Connection error: {str(e)}"
-            logger.error(self.last_error)
+            self._client.connect(
+                self._cfg.host, self._cfg.port, keepalive=60
+            )
+            self._client.loop_start()
+
+            # Wait briefly for on_connect callback
+            deadline = time.monotonic() + 3.0
+            while time.monotonic() < deadline:
+                if self._connected:
+                    return True
+                await asyncio.sleep(0.05)
+
+            if not self._connected:
+                logger.warning(
+                    f"MQTT connect timeout to {self._cfg.host}:{self._cfg.port}"
+                )
+            return self._connected
+
+        except Exception as exc:
+            self._last_error = str(exc)
+            logger.error(f"MQTT connect error: {exc}")
             return False
 
     async def disconnect(self) -> None:
-        """Disconnect from MQTT broker."""
-        try:
-            self.client.loop_stop()
-            self.client.disconnect()
-            self.connected = False
-            logger.info("MQTT disconnected")
-        except Exception as e:
-            logger.error(f"Error disconnecting: {e}")
+        """Gracefully disconnect and stop reconnect loop."""
+        if self._reconnect_task and not self._reconnect_task.done():
+            self._reconnect_task.cancel()
+            try:
+                await self._reconnect_task
+            except asyncio.CancelledError:
+                pass
 
-    async def publish(self, topic: str, payload: Dict) -> bool:
+        try:
+            self._client.loop_stop()
+            self._client.disconnect()
+            self._connected = False
+            logger.info("MQTT disconnected")
+        except Exception as exc:
+            logger.error(f"MQTT disconnect error: {exc}")
+
+    # ── Reconnect loop ────────────────────────────────────────────────────────
+
+    async def start_reconnect_loop(self) -> None:
         """
-        Publish a message to MQTT.
-        
+        Background task: reconnect with exponential backoff.
+        Flushes offline buffer after successful reconnect.
+        """
+        delay = self._rcfg.mqtt_base_s
+        while True:
+            await asyncio.sleep(delay)
+            logger.info(f"MQTT reconnect attempt #{self._reconnect_count + 1} …")
+
+            success = await self.connect()
+            if success:
+                self._reconnect_count += 1
+                logger.info(f"MQTT reconnected (#{self._reconnect_count})")
+
+                if self._on_reconnect:
+                    await self._safe_call(self._on_reconnect)
+
+                # Flush offline buffer
+                await self._flush_offline_buffer()
+                return  # Exit reconnect loop
+
+            delay = min(delay * 2.0, self._rcfg.mqtt_max_s)
+            logger.warning(f"MQTT reconnect failed — retry in {delay:.1f}s")
+
+    def ensure_reconnect_loop(self) -> None:
+        """Start reconnect loop if not already running (idempotent)."""
+        if self._reconnect_task is None or self._reconnect_task.done():
+            self._reconnect_task = asyncio.create_task(
+                self.start_reconnect_loop(),
+                name="mqtt_reconnect",
+            )
+
+    async def _flush_offline_buffer(self) -> None:
+        """Publish all buffered offline messages after reconnect."""
+        flushed = 0
+        failed = 0
+        while self._offline_buffer:
+            topic, payload, qos = self._offline_buffer.popleft()
+            ok = await self._do_publish(topic, payload, qos)
+            if ok:
+                flushed += 1
+            else:
+                failed += 1
+                break  # Re-buffer remaining on failure
+
+        if flushed:
+            logger.info(f"MQTT offline buffer flushed: {flushed} messages")
+        if failed:
+            logger.warning(f"MQTT buffer flush failed: {failed} messages lost")
+
+    # ── Publish ───────────────────────────────────────────────────────────────
+
+    async def publish(
+        self, topic: str, payload: Dict[str, Any], qos: int = 1
+    ) -> bool:
+        """
+        Publish a message. Buffers offline if not connected.
+
         Args:
-            topic: MQTT topic
-            payload: Dictionary payload (will be JSON encoded)
-            
+            topic:   MQTT topic string
+            payload: Dict to serialize as JSON
+            qos:     MQTT QoS level (default 1)
+
         Returns:
-            True if successful.
+            True if published immediately, False if buffered or failed.
         """
-        if not self.connected:
-            self.last_error = "Not connected to MQTT broker"
+        if not self._connected:
+            self._offline_buffer.append((topic, payload, qos))
+            logger.debug(
+                f"MQTT offline — buffered ({len(self._offline_buffer)} queued)"
+            )
             return False
 
+        return await self._do_publish(topic, payload, qos)
+
+    async def _do_publish(
+        self, topic: str, payload: Dict[str, Any], qos: int
+    ) -> bool:
+        """Execute actual MQTT publish."""
         try:
             message = json.dumps(payload)
-            result = self.client.publish(topic, message, qos=1)
-            
+            result = self._client.publish(topic, message, qos=qos)
             if result.rc != mqtt.MQTT_ERR_SUCCESS:
-                self.last_error = f"Publish failed: {mqtt.error_string(result.rc)}"
-                logger.error(self.last_error)
+                self._last_error = f"Publish failed: {mqtt.error_string(result.rc)}"
+                logger.error(self._last_error)
                 return False
-            
             return True
-
-        except Exception as e:
-            self.last_error = f"Publish error: {str(e)}"
-            logger.error(self.last_error)
+        except Exception as exc:
+            self._last_error = str(exc)
+            logger.error(f"MQTT publish error: {exc}")
             return False
 
-    async def subscribe(self, topic: str) -> bool:
-        """
-        Subscribe to an MQTT topic.
-        
-        Args:
-            topic: MQTT topic pattern
-            
-        Returns:
-            True if successful.
-        """
-        if not self.connected:
-            return False
+    # ── Subscribe ─────────────────────────────────────────────────────────────
 
+    async def subscribe(self, topic: str, qos: int = 1) -> bool:
+        """Subscribe to an MQTT topic."""
+        if not self._connected:
+            return False
         try:
-            result = self.client.subscribe(topic)
-            if result[0] != mqtt.MQTT_ERR_SUCCESS:
-                logger.error(f"Subscribe failed: {topic}")
-                return False
-            
-            logger.debug(f"Subscribed to: {topic}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Subscribe error: {e}")
+            result = self._client.subscribe(topic, qos=qos)
+            success = result[0] == mqtt.MQTT_ERR_SUCCESS
+            if success:
+                logger.debug(f"MQTT subscribed: {topic}")
+            else:
+                logger.error(f"MQTT subscribe failed: {topic}")
+            return success
+        except Exception as exc:
+            logger.error(f"MQTT subscribe error: {exc}")
             return False
+
+    # ── Paho callbacks ────────────────────────────────────────────────────────
+
+    def _paho_on_connect(self, client, userdata, flags, rc) -> None:
+        if rc == 0:
+            logger.info(f"MQTT connected to {self._cfg.host}:{self._cfg.port}")
+            self._connected = True
+        else:
+            logger.error(f"MQTT connect failed (rc={rc}): {mqtt.connack_string(rc)}")
+            self._connected = False
+            self._last_error = mqtt.connack_string(rc)
+
+    def _paho_on_disconnect(self, client, userdata, rc) -> None:
+        if rc != 0:
+            logger.warning(f"MQTT unexpected disconnect (rc={rc})")
+            self._connected = False
+            if self._on_disconnect:
+                asyncio.create_task(self._safe_call(self._on_disconnect))
+            self.ensure_reconnect_loop()
+        else:
+            self._connected = False
+
+    def _paho_on_message(self, client, userdata, msg) -> None:
+        if self._on_message_cb:
+            try:
+                payload = msg.payload.decode("utf-8")
+                self._on_message_cb(msg.topic, payload)
+            except Exception as exc:
+                logger.error(f"MQTT message callback error: {exc}")
+
+    # ── Helpers ───────────────────────────────────────────────────────────────
+
+    @staticmethod
+    async def _safe_call(fn: Callable) -> None:
+        try:
+            if asyncio.iscoroutinefunction(fn):
+                await fn()
+            else:
+                fn()
+        except Exception as exc:
+            logger.error(f"MQTT callback error: {exc}")
+
+    # ── Status ────────────────────────────────────────────────────────────────
 
     def is_connected(self) -> bool:
-        """Check if MQTT is connected."""
-        return self.connected
-
-    def set_message_callback(self, callback: Callable) -> None:
-        """Set callback for incoming messages."""
-        self.on_message_callback = callback
+        return self._connected
 
     def get_last_error(self) -> Optional[str]:
-        """Get last error message."""
-        return self.last_error
+        return self._last_error
+
+    def set_message_callback(self, callback: Callable) -> None:
+        self._on_message_cb = callback
+
+    @property
+    def reconnect_count(self) -> int:
+        return self._reconnect_count
+
+    @property
+    def offline_buffer_size(self) -> int:
+        return len(self._offline_buffer)
