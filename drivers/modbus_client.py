@@ -171,7 +171,7 @@ class ModbusClient:
 
         try:
             response = await self._client.read_discrete_inputs(
-                address=address, count=count, slave=self._cfg.unit_id
+                address=address, count=count, device_id=self._cfg.unit_id
             )
             if response.isError():
                 self._last_error = f"read_discrete_inputs error: {response}"
@@ -200,7 +200,7 @@ class ModbusClient:
 
         try:
             response = await self._client.read_input_registers(
-                address=address, count=count, slave=self._cfg.unit_id
+                address=address, count=count, device_id=self._cfg.unit_id
             )
             if response.isError():
                 self._last_error = f"read_input_registers error: {response}"
@@ -231,7 +231,7 @@ class ModbusClient:
         for attempt in range(retries + 1):
             try:
                 response = await self._client.write_coil(
-                    address=address, value=value, slave=self._cfg.unit_id
+                    address=address, value=value, device_id=self._cfg.unit_id
                 )
                 if not response.isError():
                     return True
@@ -261,7 +261,7 @@ class ModbusClient:
         for attempt in range(retries + 1):
             try:
                 response = await self._client.write_coils(
-                    address=address, values=values, slave=self._cfg.unit_id
+                    address=address, values=values, device_id=self._cfg.unit_id
                 )
                 if not response.isError():
                     return True

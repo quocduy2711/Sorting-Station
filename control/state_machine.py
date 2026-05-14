@@ -31,6 +31,71 @@ class StateMachine:
         self.system_state = system_state
         self.output_state = output_state
 
+    def register_handlers(self, em: 'EventManager') -> None:
+        """Register to listen to system events."""
+        self._em = em
+        from control.event_manager import SystemEvent
+        em.subscribe(SystemEvent.START_BUTTON_PRESSED, self._on_start)
+        em.subscribe(SystemEvent.STOP_BUTTON_PRESSED, self._on_stop)
+        em.subscribe(SystemEvent.ESTOP_ACTIVATED, self._on_estop)
+        em.subscribe(SystemEvent.ESTOP_CLEARED, self._on_estop_clear)
+        em.subscribe(SystemEvent.SORT_COMMAND, self._on_sort_command)
+
+    async def _on_start(self, event):
+        if self.system_state.state in (SystemStateEnum.IDLE, SystemStateEnum.STOPPED):
+            await self.transition_to(SystemStateEnum.STARTING)
+            import asyncio
+            # Wait 500ms for conveyors to spin up before fully running
+            asyncio.create_task(self._delayed_run())
+
+    async def _delayed_run(self):
+        import asyncio
+        await asyncio.sleep(0.5)
+        if self.system_state.state == SystemStateEnum.STARTING:
+            await self.transition_to(SystemStateEnum.RUNNING)
+
+    async def _on_stop(self, event):
+        if self.system_state.state not in (SystemStateEnum.EMERGENCY_STOP, SystemStateEnum.ERROR):
+            await self.transition_to(SystemStateEnum.STOPPED)
+
+    async def _on_estop(self, event):
+        await self.transition_to(SystemStateEnum.EMERGENCY_STOP)
+
+    async def _on_estop_clear(self, event):
+        if self.system_state.state == SystemStateEnum.EMERGENCY_STOP:
+            await self.transition_to(SystemStateEnum.STOPPED)
+
+    async def _on_sort_command(self, event):
+        sorter_id = event.data.get("sorter_id")
+        if sorter_id:
+            import asyncio
+            asyncio.create_task(self._sort_sequence(sorter_id))
+
+    async def _sort_sequence(self, sorter_id: int):
+        import asyncio
+        logger.info(f"FSM: Starting sort sequence for sorter {sorter_id}")
+        
+        # Lower blade
+        await self.lower_blade()
+        await self.activate_sorter(sorter_id)
+        
+        # Let product pass the blade
+        await asyncio.sleep(1.5)
+        
+        # Raise blade
+        await self.raise_blade()
+        
+        # Let product reach and clear the sorter
+        await asyncio.sleep(4.0)
+        
+        # Turn off sorter
+        await self.deactivate_sorter(sorter_id)
+        
+        # Notify sorting done
+        from control.event_manager import SystemEvent
+        if hasattr(self, '_em'):
+            self._em.emit(SystemEvent.PRODUCT_SORT_DONE, source="StateMachine")
+
     async def transition_to(self, new_state: SystemStateEnum) -> None:
         """
         Transition to a new system state.

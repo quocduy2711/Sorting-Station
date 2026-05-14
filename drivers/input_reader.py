@@ -89,9 +89,11 @@ class InputReader:
         )
 
         # Track vision reads
+        self._last_vision_edge = False
         if vision_id > 0 and self.previous_vision_id == 0:
             # Edge trigger: vision just appeared
             self.vision_read_count += 1
+            self._last_vision_edge = True
         
         self.previous_vision_id = vision_id
 
@@ -106,8 +108,7 @@ class InputReader:
         Returns:
             True if new vision reading detected (0->X edge).
         """
-        return (current_snapshot.vision_id > 0 and 
-                self.previous_vision_id == 0)
+        return self._last_vision_edge
 
     def reset_vision_edge(self) -> None:
         """Reset vision edge detection."""

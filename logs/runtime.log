@@ -1,0 +1,75 @@
+{"asctime": "2026-05-14 10:10:32,843", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:10:32,948", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:10:32,983", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:10:33,025", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:10:33,025", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:10:33,025", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:10:33,026", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:10:33,026", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: ModbusClientMixin.read_input_registers() got an unexpected keyword argument 'slave'"}
+{"asctime": "2026-05-14 10:10:33,026", "name": "__main__", "levelname": "INFO", "message": "=== Runtime Stopped ==="}
+{"asctime": "2026-05-14 10:10:33,026", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:10:33,026", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:10:33,027", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService stopped"}
+{"asctime": "2026-05-14 10:10:33,027", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop stopped"}
+{"asctime": "2026-05-14 10:12:29,988", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:12:30,098", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:12:30,115", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:12:30,176", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:12:30,184", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: 'TimerManager' object has no attribute 'tick'"}
+{"asctime": "2026-05-14 10:12:30,184", "name": "__main__", "levelname": "INFO", "message": "=== Runtime Stopped ==="}
+{"asctime": "2026-05-14 10:12:30,184", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService stopped"}
+{"asctime": "2026-05-14 10:12:30,184", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop stopped"}
+{"asctime": "2026-05-14 10:14:05,927", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:14:06,042", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:14:06,059", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:14:06,119", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:14:06,120", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:14:06,120", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:14:06,120", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:14:06,120", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:14:06,120", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:14:07,070", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:14:07,178", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:14:07,178", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnected (attempt #1)"}
+{"asctime": "2026-05-14 10:14:08,128", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:14:08,129", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnected (#1)"}
+{"asctime": "2026-05-14 10:14:09,130", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:18:19,991", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:18:20,104", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:18:20,108", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:18:20,166", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:18:20,166", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:18:20,166", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:18:20,167", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:18:20,167", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:18:20,167", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:18:20,169", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: IDLE -> STOPPED"}
+{"asctime": "2026-05-14 10:18:20,169", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STOPPED -> EMERGENCY_STOP"}
+{"asctime": "2026-05-14 10:18:21,116", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:18:21,223", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:18:21,223", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnected (attempt #1)"}
+{"asctime": "2026-05-14 10:18:22,174", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:18:22,175", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnected (#1)"}
+{"asctime": "2026-05-14 10:18:23,175", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:19:54,058", "name": "services.runtime_service", "levelname": "INFO", "message": "Initializing RuntimeEngine..."}
+{"asctime": "2026-05-14 10:19:54,167", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:19:54,184", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:19:54,245", "name": "services.sorting_service", "levelname": "INFO", "message": "SortingService handlers registered"}
+{"asctime": "2026-05-14 10:19:54,246", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService handlers registered"}
+{"asctime": "2026-05-14 10:19:54,246", "name": "services.alarm_service", "levelname": "INFO", "message": "AlarmService handlers registered"}
+{"asctime": "2026-05-14 10:19:54,246", "name": "services.runtime_service", "levelname": "INFO", "message": "RuntimeEngine scan loop started (interval=50ms)"}
+{"asctime": "2026-05-14 10:19:54,246", "name": "control.event_manager", "levelname": "INFO", "message": "EventManager dispatch loop started"}
+{"asctime": "2026-05-14 10:19:54,246", "name": "services.telemetry_service", "levelname": "INFO", "message": "TelemetryService started \u2014 interval=150ms"}
+{"asctime": "2026-05-14 10:19:55,186", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:19:55,293", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus connected \u2192 192.168.1.157:502"}
+{"asctime": "2026-05-14 10:19:55,293", "name": "drivers.modbus_client", "levelname": "INFO", "message": "Modbus reconnected (attempt #1)"}
+{"asctime": "2026-05-14 10:19:56,246", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnect attempt #1 \u2026"}
+{"asctime": "2026-05-14 10:19:56,260", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT reconnected (#1)"}
+{"asctime": "2026-05-14 10:19:57,248", "name": "telemetry.mqtt_client", "levelname": "INFO", "message": "MQTT connected to 127.0.0.1:1883"}
+{"asctime": "2026-05-14 10:20:39,299", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: IDLE -> STARTING"}
+{"asctime": "2026-05-14 10:20:39,806", "name": "control.state_machine", "levelname": "INFO", "message": "State transition: STARTING -> RUNNING"}

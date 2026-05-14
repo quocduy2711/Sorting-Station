@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  sorting-station:
+    build: .
+    container_name: sorting-station-runtime
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+    # If Modbus/MQTT are on host, use host networking or set explicit IPs in .env
+    # network_mode: "host"
