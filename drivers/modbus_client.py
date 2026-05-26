@@ -276,6 +276,76 @@ class ModbusClient:
 
         return False
 
+    async def write_register(
+        self, address: int, value: int, retries: int = 1
+    ) -> bool:
+        """
+        Write a single holding register with retry.
+
+        Args:
+            address: Modbus register address
+            value: 16-bit unsigned integer value (0-65535)
+            retries: Number of retry attempts
+
+        Returns:
+            True if successful.
+        """
+        if not self._connected or not self._client:
+            return False
+
+        for attempt in range(retries + 1):
+            try:
+                response = await self._client.write_register(
+                    address=address, value=value, device_id=self._cfg.unit_id
+                )
+                if not response.isError():
+                    return True
+                self._last_error = f"write_register addr={address}: {response}"
+                logger.warning(self._last_error)
+
+            except (ModbusException, ConnectionException, OSError) as exc:
+                self._last_error = str(exc)
+                logger.error(f"Modbus write_register error (attempt {attempt+1}): {exc}")
+                self._handle_comm_error()
+                return False
+
+        return False
+
+    async def write_registers(
+        self, address: int, values: List[int], retries: int = 1
+    ) -> bool:
+        """
+        Write multiple holding registers with retry.
+
+        Args:
+            address: Starting Modbus register address
+            values: List of 16-bit unsigned integer values
+            retries: Number of retry attempts
+
+        Returns:
+            True if successful.
+        """
+        if not self._connected or not self._client:
+            return False
+
+        for attempt in range(retries + 1):
+            try:
+                response = await self._client.write_registers(
+                    address=address, values=values, device_id=self._cfg.unit_id
+                )
+                if not response.isError():
+                    return True
+                self._last_error = f"write_registers addr={address}: {response}"
+                logger.warning(self._last_error)
+
+            except (ModbusException, ConnectionException, OSError) as exc:
+                self._last_error = str(exc)
+                logger.error(f"Modbus write_registers error (attempt {attempt+1}): {exc}")
+                self._handle_comm_error()
+                return False
+
+        return False
+
     # ── Internal helpers ──────────────────────────────────────────────────────
 
     def _handle_comm_error(self) -> None:

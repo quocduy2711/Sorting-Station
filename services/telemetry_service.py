@@ -1,39 +1,47 @@
 """
-TelemetryService — periodic MQTT telemetry publisher.
+TelemetryService — business telemetry builder.
 
 Responsibilities:
-- Run periodic publish loop at TELEMETRY_MS interval
-- Build payload from SystemState + RuntimeMetrics + ProductTracker
-- Heartbeat the health monitor on each publish
-- Subscribe to FSM state changes for immediate attribute publish
+- Run periodic build loop at TELEMETRY_MS interval
+- Build TelemetryPayload from SystemState + ProductTracker
+- Enqueue payload to TelemetryPublisher (NON-BLOCKING)
+- Publish attributes on FSM state change
 
-RULE: Does NOT own MQTT connection — uses MQTTClient.
-RULE: Offline buffering handled by MQTTClient layer.
+RULE: Does NOT know HTTP, MQTT, QoS, topics, or reconnect logic.
+RULE: Only interacts with TelemetryPublisher port (ABC).
+RULE: enqueue_nowait() MUST be the ONLY publish method used from the loop.
+RULE: NEVER calls await for any transport operation in the build loop.
 """
 from __future__ import annotations
 
 import asyncio
 import logging
 import time
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from control.event_manager import Event, SystemEvent
+from models.system_state import SystemStateEnum
+from models.telemetry_payload import TelemetryPayload
 
 if TYPE_CHECKING:
-    from config.runtime_context import RuntimeContext
+    from config.runtime_context import ApplicationContext
 
 logger = logging.getLogger(__name__)
-
-TELEMETRY_TOPIC = "v1/devices/me/telemetry"
-ATTRIBUTES_TOPIC = "v1/devices/me/attributes"
 
 
 class TelemetryService:
     """
-    Runs a periodic coroutine to publish telemetry to ThingsBoard.
+    Builds telemetry payloads and enqueues them non-blocking.
+
+    Pipeline:
+        TelemetryService._build_payload() → pure, no I/O
+            ↓
+        ctx.infrastructure.telemetry.enqueue_nowait(payload) → non-blocking
+            ↓
+        [TelemetryPipeline handles batching, HTTP upload, retry]
     """
 
-    def __init__(self, ctx: "RuntimeContext") -> None:
+    def __init__(self, ctx: "ApplicationContext") -> None:
         self._ctx = ctx
         self._interval_s: float = ctx.config.timing.telemetry_ms / 1000.0
         self._publish_count: int = 0
@@ -44,17 +52,10 @@ class TelemetryService:
         self._ctx.event_manager.subscribe(
             SystemEvent.FSM_STATE_CHANGED, self._on_state_changed
         )
-        self._ctx.event_manager.subscribe(
-            SystemEvent.MQTT_RECONNECTED, self._on_mqtt_reconnected
-        )
         logger.info("TelemetryService handlers registered")
 
     async def run(self) -> None:
-        """
-        Main telemetry publish loop.
-
-        Runs indefinitely until cancelled.
-        """
+        """Main telemetry loop — builds payload and enqueues non-blocking."""
         self._running = True
         logger.info(
             f"TelemetryService started — interval={self._interval_s*1000:.0f}ms"
@@ -62,112 +63,114 @@ class TelemetryService:
         try:
             while self._running:
                 start = time.monotonic()
-                await self._publish_telemetry()
+                self._build_and_enqueue()  # SYNC — no await!
                 elapsed = time.monotonic() - start
 
-                # Precise sleep: subtract execution time
+                # Precise sleep
                 sleep_s = max(0.0, self._interval_s - elapsed)
                 await asyncio.sleep(sleep_s)
         except asyncio.CancelledError:
             logger.info("TelemetryService stopped")
             self._running = False
 
-    async def _publish_telemetry(self) -> None:
-        """Build and publish current telemetry payload."""
-        ctx = self._ctx
-        mqtt = ctx.mqtt
-        system_state = ctx.system_state
-        tracker = ctx.product_tracker
-        runtime_metrics = ctx.runtime_metrics
-        health = ctx.health_monitor
+    def _build_and_enqueue(self) -> None:
+        """
+        Build telemetry payload and enqueue NON-BLOCKING.
 
-        if not mqtt:
+        This method is intentionally SYNCHRONOUS.
+        It MUST NOT await any I/O or transport operation.
+        Total execution time budget: < 1ms.
+        """
+        ctx = self._ctx
+        telemetry_pub = ctx.infrastructure.telemetry
+
+        if not telemetry_pub:
             return
 
-        # Collect metrics snapshot
-        metrics = runtime_metrics.snapshot() if runtime_metrics else None
+        system_state = ctx.state.system_state
+        tracker = ctx.product_tracker
+        health = ctx.state.health_monitor
 
-        # Current product info
+        # Current product info for vision fields
         product = tracker.get_current_product() if tracker else None
 
-        # Build payload
-        payload: dict = {
-            "system_state": system_state.state.value if system_state else "UNKNOWN",
-            "modbus_connected": system_state.modbus_connected if system_state else False,
-            "mqtt_connected": True,  # If we're publishing, we're connected
-            "total_products": system_state.total_products if system_state else 0,
-            "successful_sorts": system_state.successful_sorts if system_state else 0,
-            "failed_sorts": system_state.failed_sorts if system_state else 0,
-            "alarm_count": system_state.alarm_count if system_state else 0,
-            "uptime_seconds": round(system_state.get_uptime_seconds(), 1) if system_state else 0,
-        }
+        # Vision sensor fields
+        vision_id = 0
+        vision_shape = "Unknown"
+        vision_color = "Unknown"
+        vision_ok = True
+        if system_state and system_state.last_error and "VISION" in system_state.last_error:
+            vision_ok = False
 
         if product:
-            payload.update({
-                "current_product_id": product.vision_id,
-                "current_product_shape": product.shape.value,
-                "current_product_color": product.color.value,
-                "current_product_sorter": product.target_sorter,
-            })
-        else:
-            payload.update({
-                "current_product_id": 0,
-                "current_product_shape": "",
-                "current_product_color": "",
-                "current_product_sorter": 0,
-            })
+            vision_id = product.vision_id if hasattr(product, 'vision_id') else 0
+            vision_shape = product.shape.value if hasattr(product, 'shape') else "Unknown"
+            vision_color = product.color.value if hasattr(product, 'color') else "Unknown"
 
-        if metrics:
-            payload.update({
-                "scan_cycle_ms": round(metrics.scan_cycle_ms, 2),
-                "avg_scan_cycle_ms": round(metrics.avg_scan_cycle_ms, 2),
-                "max_scan_cycle_ms": round(metrics.max_scan_cycle_ms, 2),
-                "mqtt_reconnect_count": metrics.mqtt_reconnect_count,
-                "modbus_reconnect_count": metrics.modbus_reconnect_count,
-                "modbus_dropped_reads": metrics.modbus_dropped_reads,
-                "watchdog_trips": metrics.watchdog_trips,
-                "mqtt_offline_buffer": metrics.mqtt_offline_buffer_size,
-            })
+        # Determine is_running
+        is_running = (
+            system_state.state in (
+                SystemStateEnum.RUNNING,
+                SystemStateEnum.WAITING_PRODUCT,
+                SystemStateEnum.WAITING_CLEAR_ZONE,
+                SystemStateEnum.READING_ID,
+                SystemStateEnum.MOVING_TO_SORTER,
+                SystemStateEnum.SORTING,
+            )
+            if system_state
+            else False
+        )
 
-        # Publish with latency tracking
-        t0 = time.monotonic()
-        ok = await mqtt.publish(TELEMETRY_TOPIC, payload)
-        latency_ms = (time.monotonic() - t0) * 1000.0
+        # RPC connection status
+        rpc_available = False
+        if ctx.infrastructure.rpc:
+            rpc_available = ctx.infrastructure.rpc.is_connected()
 
+        # Temperature from serial bridge (if available)
+        temperature_c = 0.0
+        serial_bridge = getattr(ctx, 'serial_bridge', None)
+        if serial_bridge and hasattr(serial_bridge, 'last_temperature'):
+            temperature_c = serial_bridge.last_temperature
+
+        # Build typed payload
+        payload = TelemetryPayload(
+            machine_state=system_state.state.value if system_state else "UNKNOWN",
+            is_running=is_running,
+
+            remover1_count=system_state.remover_counts.get(1, 0) if system_state else 0,
+            remover2_count=system_state.remover_counts.get(2, 0) if system_state else 0,
+            remover3_count=system_state.remover_counts.get(3, 0) if system_state else 0,
+
+            vision_product_id=vision_id,
+            vision_product_shape=vision_shape,
+            vision_product_color=vision_color,
+            vision_ok=vision_ok,
+
+            modbus_connected=system_state.modbus_connected if system_state else False,
+            mqtt_rpc_available=rpc_available,
+
+            temperature_c=temperature_c,
+            uptime_seconds=system_state.get_uptime_seconds() if system_state else 0.0,
+
+            heartbeat=True,
+        )
+
+        # NON-BLOCKING enqueue — returns immediately
+        ok = telemetry_pub.enqueue_nowait(payload.to_dict())
         if ok:
             self._publish_count += 1
-            if runtime_metrics:
-                runtime_metrics.record_mqtt_latency(latency_ms)
             if health:
                 health.heartbeat_telemetry()
-            logger.debug(
-                f"TelemetryService: published #{self._publish_count} "
-                f"(latency={latency_ms:.1f}ms)"
-            )
-        else:
-            logger.debug("TelemetryService: buffered offline (MQTT disconnected)")
 
     async def _on_state_changed(self, event: Event) -> None:
         """Publish immediate attribute update on FSM state change."""
         ctx = self._ctx
-        if ctx.mqtt and ctx.system_state:
-            await ctx.mqtt.publish(
-                ATTRIBUTES_TOPIC,
-                {"system_state": event.data.get("new_state", "")},
-            )
-
-    async def _on_mqtt_reconnected(self, event: Event) -> None:
-        """Publish device attributes immediately after MQTT reconnect."""
-        ctx = self._ctx
-        if ctx.mqtt and ctx.system_state:
-            await ctx.mqtt.publish(
-                ATTRIBUTES_TOPIC,
-                {
-                    "firmware_version": "2.0.0",
-                    "station_id": "sorting_station_01",
-                    "system_state": ctx.system_state.state.value,
-                },
+        attr_pub = ctx.infrastructure.attributes
+        if attr_pub and ctx.state.system_state:
+            await attr_pub.publish_client_attributes(
+                {"system_state": event.data.get("new_state", "")}
             )
 
     def stop(self) -> None:
+        """Stop the telemetry loop."""
         self._running = False

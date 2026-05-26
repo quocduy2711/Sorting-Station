@@ -5,8 +5,13 @@ RULE: Only one current product at any time.
 RULE: Protected by asyncio.Lock()
 """
 import logging
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
 from models.product import Product, ProductState
+
+if TYPE_CHECKING:
+    from control.event_manager import EventManager
+    from models.system_state import SystemState
 
 
 logger = logging.getLogger(__name__)
@@ -15,12 +20,23 @@ logger = logging.getLogger(__name__)
 class ProductTracker:
     """
     Tracks the current product moving through the system.
-    
+
     RULE: Only ONE active product at a time.
     """
 
-    def __init__(self):
-        """Initialize product tracker."""
+    def __init__(
+        self,
+        system_state: Optional["SystemState"] = None,
+        event_manager: Optional["EventManager"] = None,
+    ) -> None:
+        """Initialize product tracker.
+
+        Args:
+            system_state: System state for remover counting.
+            event_manager: Event bus for emitting PRODUCT_SORTED.
+        """
+        self._system_state = system_state
+        self._event_manager = event_manager
         self.current_product: Optional[Product] = None
         self.product_history: list[Product] = []
         self.next_uid = 1000
@@ -123,3 +139,26 @@ class ProductTracker:
     def get_history(self, limit: int = 50) -> list[Product]:
         """Get recent product history."""
         return self.product_history[-limit:]
+
+    def on_product_dropped(self, sorter_id: int) -> None:
+        """Called when Modbus confirms product has dropped into remover.
+
+        RULE: Only call when drop event is confirmed by sensor.
+        RULE: Counter increment + event emit happen atomically.
+
+        Args:
+            sorter_id: Remover/sorter ID (1, 2, or 3).
+        """
+        if self._system_state:
+            self._system_state.increment_remover(sorter_id)
+
+        if self._event_manager:
+            from control.event_manager import SystemEvent
+            self._event_manager.emit(
+                SystemEvent.PRODUCT_SORTED,
+                source="ProductTracker",
+                data={"sorter": sorter_id},
+            )
+
+        logger.info(f"Product dropped into remover {sorter_id}")
+

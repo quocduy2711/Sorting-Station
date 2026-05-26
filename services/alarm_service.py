@@ -1,11 +1,14 @@
 """
-AlarmService — bridges AlarmManager to MQTT ThingsBoard alarms.
+AlarmService — bridges AlarmManager to cloud transport.
 
 Responsibilities:
 - Subscribe to ALARM_TRIGGERED event
-- Format and publish alarm payload to ThingsBoard telemetry
+- Format and publish alarm payload via TelemetryPublisher port
 - Log alarms to alarms.log (via WARNING level)
 - Track alarm count in SystemState
+
+RULE: Does NOT know HTTP, MQTT, topics, or transport details.
+RULE: Uses TelemetryPublisher.publish_alarm() — port abstraction.
 """
 from __future__ import annotations
 
@@ -16,19 +19,17 @@ from alarms.alarm_manager import AlarmManager, AlarmType
 from control.event_manager import Event, SystemEvent
 
 if TYPE_CHECKING:
-    from config.runtime_context import RuntimeContext
+    from config.runtime_context import ApplicationContext
 
 logger = logging.getLogger(__name__)
-
-ALARM_TOPIC = "v1/devices/me/telemetry"
 
 
 class AlarmService:
     """
-    Bridges internal alarm events to MQTT / ThingsBoard.
+    Bridges internal alarm events to cloud transport via port.
     """
 
-    def __init__(self, ctx: "RuntimeContext") -> None:
+    def __init__(self, ctx: "ApplicationContext") -> None:
         self._ctx = ctx
         self._alarm_manager: AlarmManager = ctx.alarm_manager
 
@@ -69,10 +70,10 @@ class AlarmService:
         )
 
         # Update system state alarm counter
-        if self._ctx.system_state:
-            self._ctx.system_state.alarm_count += 1
+        if self._ctx.state.system_state:
+            self._ctx.state.system_state.alarm_count += 1
 
-        # Publish to MQTT (log-style telemetry)
+        # Publish via transport port
         await self._publish_alarm(alarm_type_str, message, severity, source)
 
     async def _on_watchdog_timeout(self, event: Event) -> None:
@@ -86,10 +87,10 @@ class AlarmService:
         await self._publish_alarm("WATCHDOG_FAILURE", message, "CRITICAL", "Watchdog")
 
         # Mark health monitor
-        if self._ctx.health_monitor:
-            self._ctx.health_monitor.set_watchdog_ok(False)
-        if self._ctx.runtime_metrics:
-            self._ctx.runtime_metrics.increment_watchdog_trips()
+        if self._ctx.state.health_monitor:
+            self._ctx.state.health_monitor.set_watchdog_ok(False)
+        if self._ctx.state.metrics:
+            self._ctx.state.metrics.increment_watchdog_trips()
 
     async def _on_modbus_disconnected(self, event: Event) -> None:
         """Handle Modbus disconnect alarm."""
@@ -98,29 +99,29 @@ class AlarmService:
         self._alarm_manager.trigger_alarm(
             AlarmType.MODBUS_DISCONNECT, message=message, source="ModbusClient"
         )
-        if self._ctx.system_state:
-            self._ctx.system_state.modbus_connected = False
-        if self._ctx.health_monitor:
-            self._ctx.health_monitor.set_modbus_connected(False)
-        if self._ctx.runtime_metrics:
-            self._ctx.runtime_metrics.increment_modbus_reconnect()
+        if self._ctx.state.system_state:
+            self._ctx.state.system_state.modbus_connected = False
+        if self._ctx.state.health_monitor:
+            self._ctx.state.health_monitor.set_modbus_connected(False)
+        if self._ctx.state.metrics:
+            self._ctx.state.metrics.increment_modbus_reconnect()
         await self._publish_alarm("MODBUS_DISCONNECT", message, "WARNING", "ModbusClient")
 
     async def _on_mqtt_disconnected(self, event: Event) -> None:
-        """Handle MQTT disconnect (log only, no MQTT publish possible)."""
-        message = "MQTT connection lost — telemetry buffering offline"
+        """Handle MQTT disconnect (log only — MQTT is RPC-only now)."""
+        message = "MQTT RPC connection lost — RPC commands unavailable"
         logger.warning(message)
-        if self._ctx.health_monitor:
-            self._ctx.health_monitor.set_mqtt_connected(False)
-        if self._ctx.runtime_metrics:
-            self._ctx.runtime_metrics.increment_mqtt_reconnect()
+        if self._ctx.state.health_monitor:
+            self._ctx.state.health_monitor.set_mqtt_rpc_available(False)
+        if self._ctx.state.metrics:
+            self._ctx.state.metrics.increment_mqtt_reconnect()
 
     async def _publish_alarm(
         self, alarm_type: str, message: str, severity: str, source: str
     ) -> None:
-        """Publish alarm to ThingsBoard as telemetry event."""
-        mqtt = self._ctx.mqtt
-        if not mqtt:
+        """Publish alarm via TelemetryPublisher port."""
+        telemetry_pub = self._ctx.infrastructure.telemetry
+        if not telemetry_pub:
             return
 
         payload = {
@@ -130,4 +131,4 @@ class AlarmService:
             "alarm_severity": severity,
             "alarm_source": source,
         }
-        await mqtt.publish(ALARM_TOPIC, payload)
+        await telemetry_pub.publish_alarm(payload)

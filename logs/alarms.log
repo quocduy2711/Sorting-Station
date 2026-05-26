@@ -1,31 +1,313 @@
-{"asctime": "2026-05-14 10:10:33,026", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: ModbusClientMixin.read_input_registers() got an unexpected keyword argument 'slave'"}
-{"asctime": "2026-05-14 10:12:30,184", "name": "__main__", "levelname": "CRITICAL", "message": "Fatal error: 'TimerManager' object has no attribute 'tick'"}
-{"asctime": "2026-05-14 10:27:44,832", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:28:20,682", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:29:04,949", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:30:07,106", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:42:34,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:08,744", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:12,115", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:13,550", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:17,913", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:20,162", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:26,957", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:29,141", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:30,076", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:35,923", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:48,765", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:43:50,569", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:44:03,286", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:44:05,521", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 10:44:09,948", "name": "services.sorting_service", "levelname": "WARNING", "message": "SortingService: product detected while one is active \u2014 ignoring"}
-{"asctime": "2026-05-14 11:09:18,437", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:09:44,955", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:10:44,498", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:11:26,964", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:11:42,773", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:11:45,022", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:12:08,155", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:12:27,817", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:18:18,705", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
-{"asctime": "2026-05-14 11:18:27,741", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-15 21:44:55,621", "name": "services.thingsboard_service", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 is unreachable ([WinError 10061] No connection could be made because the target machine actively refused it). Run tools/probe_mqtt_port.py to find the correct port, then update MQTT_PORT / TB_MQTT_PORT in .env."}
+{"asctime": "2026-05-15 21:44:55,628", "name": "services.thingsboard_service", "levelname": "WARNING", "message": "MQTT broker tb-dev.imespro.ai:1883 is not reachable. Attempting HTTP fallback transport..."}
+{"asctime": "2026-05-15 21:44:56,635", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.180:502]"}
+{"asctime": "2026-05-15 21:44:56,642", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-15 21:44:56,642", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-15 21:44:56,642", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-15 21:44:56,642", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-15 21:44:59,794", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:44:59,794", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 4.0s"}
+{"asctime": "2026-05-15 21:45:05,892", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:45:05,892", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 8.0s"}
+{"asctime": "2026-05-15 21:45:15,966", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:45:15,967", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 16.0s"}
+{"asctime": "2026-05-15 21:45:34,076", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:45:34,077", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 32.0s"}
+{"asctime": "2026-05-15 21:46:08,268", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:46:08,268", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 60.0s"}
+{"asctime": "2026-05-15 21:47:10,390", "name": "telemetry.mqtt_client", "levelname": "ERROR", "message": "MQTT connect error: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-15 21:47:10,390", "name": "telemetry.mqtt_client", "levelname": "WARNING", "message": "MQTT reconnect failed \u2014 retry in 60.0s"}
+{"asctime": "2026-05-15 21:47:34,269", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed client session\nclient_session: <aiohttp.client.ClientSession object at 0x00000280FCFED160>"}
+{"asctime": "2026-05-15 21:47:34,269", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed connector\nconnections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x00000280FCBA9FF0>, 122380.3494059), (<aiohttp.client_proto.ResponseHandler object at 0x00000280FCB07350>, 122381.4816588)])']\nconnector: <aiohttp.connector.TCPConnector object at 0x00000280FCFED2B0>"}
+{"asctime": "2026-05-16 09:03:04,999", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:03:04,999", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-16 09:03:05,000", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-16 09:03:08,849", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:03:08,849", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-16 09:03:15,059", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:03:15,060", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-16 09:03:25,511", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:03:25,511", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-16 09:03:44,222", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:03:44,222", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-16 09:04:12,836", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:04:12,837", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-16 09:05:23,438", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:05:23,439", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-16 09:12:40,182", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:12:40,182", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-16 09:12:40,183", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-16 09:12:40,185", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-16 09:12:40,185", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-16 09:12:40,185", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-16 09:12:40,186", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-16 09:12:40,186", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-16 09:12:44,299", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:12:44,300", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-16 09:12:49,786", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:12:49,786", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-16 09:13:00,595", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:13:00,595", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-16 09:13:19,373", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:13:19,373", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-16 09:13:59,644", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:13:59,644", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-16 09:15:09,476", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:15:09,476", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-16 09:16:10,929", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:16:10,929", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #7"}
+{"asctime": "2026-05-16 09:17:04,218", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:17:04,218", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #8"}
+{"asctime": "2026-05-16 09:18:16,447", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:18:16,448", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #9"}
+{"asctime": "2026-05-16 09:19:14,830", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:19:14,830", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #10"}
+{"asctime": "2026-05-16 09:20:21,348", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:20:21,349", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #11"}
+{"asctime": "2026-05-16 09:21:17,437", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:21:17,438", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #12"}
+{"asctime": "2026-05-16 09:21:57,590", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Product detected but one is already in flight \u2014 ignoring"}
+{"asctime": "2026-05-16 09:22:07,063", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-16 09:22:07,064", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-16 09:22:07,064", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read input registers"}
+{"asctime": "2026-05-16 09:22:07,064", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-16 09:22:07,064", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-16 09:22:09,139", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:09,140", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Repeating...."}
+{"asctime": "2026-05-16 09:22:10,081", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:10,190", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus connect failed: Connection refused"}
+{"asctime": "2026-05-16 09:22:10,190", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus reconnect failed \u2014 retrying in 2.0s"}
+{"asctime": "2026-05-16 09:22:11,356", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:11,356", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:13,774", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:13,775", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:14,213", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:14,322", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus connect failed: Connection refused"}
+{"asctime": "2026-05-16 09:22:14,323", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus reconnect failed \u2014 retrying in 4.0s"}
+{"asctime": "2026-05-16 09:22:16,597", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:16,597", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:20,221", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:20,221", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:20,346", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:20,456", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus connect failed: Connection refused"}
+{"asctime": "2026-05-16 09:22:20,457", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus reconnect failed \u2014 retrying in 8.0s"}
+{"asctime": "2026-05-16 09:22:27,011", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:22:27,012", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #13"}
+{"asctime": "2026-05-16 09:22:27,012", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect [WinError 1225] The remote computer refused the network connection"}
+{"asctime": "2026-05-16 09:22:27,012", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Repeating...."}
+{"asctime": "2026-05-16 09:22:30,480", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-16 09:22:30,588", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus connect failed: Connection refused"}
+{"asctime": "2026-05-16 09:22:30,589", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus reconnect failed \u2014 retrying in 16.0s"}
+{"asctime": "2026-05-16 09:23:36,628", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:23:36,628", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #14"}
+{"asctime": "2026-05-16 09:24:32,290", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:24:32,290", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #15"}
+{"asctime": "2026-05-16 09:25:45,874", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:25:45,874", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #16"}
+{"asctime": "2026-05-16 09:26:41,356", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: timed out"}
+{"asctime": "2026-05-16 09:26:41,356", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #17"}
+{"asctime": "2026-05-16 09:27:37,071", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:27:37,072", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #18"}
+{"asctime": "2026-05-16 09:28:46,937", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:28:46,937", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #19"}
+{"asctime": "2026-05-16 09:29:40,147", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:29:40,147", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #20"}
+{"asctime": "2026-05-16 09:30:44,822", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:30:44,822", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #21"}
+{"asctime": "2026-05-16 09:31:46,449", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:31:46,449", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #22"}
+{"asctime": "2026-05-16 09:32:36,737", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:32:36,737", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #23"}
+{"asctime": "2026-05-16 09:33:50,529", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:33:50,530", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #24"}
+{"asctime": "2026-05-16 09:34:52,749", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:34:52,750", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #25"}
+{"asctime": "2026-05-16 09:36:01,625", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:36:01,626", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #26"}
+{"asctime": "2026-05-16 09:37:10,365", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:37:10,366", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #27"}
+{"asctime": "2026-05-16 09:38:19,808", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:38:19,808", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #28"}
+{"asctime": "2026-05-16 09:39:14,502", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:39:14,503", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #29"}
+{"asctime": "2026-05-16 09:40:26,483", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:40:26,484", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #30"}
+{"asctime": "2026-05-16 09:41:26,401", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:41:26,401", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #31"}
+{"asctime": "2026-05-16 09:42:33,127", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:42:33,127", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #32"}
+{"asctime": "2026-05-16 09:43:47,055", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:43:47,055", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #33"}
+{"asctime": "2026-05-16 09:44:57,842", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:44:57,842", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #34"}
+{"asctime": "2026-05-16 09:46:02,902", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:46:02,902", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #35"}
+{"asctime": "2026-05-16 09:47:11,242", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:47:11,242", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #36"}
+{"asctime": "2026-05-16 09:48:25,164", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:48:25,165", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #37"}
+{"asctime": "2026-05-16 09:49:18,605", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:49:18,606", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #38"}
+{"asctime": "2026-05-16 09:50:19,593", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:50:19,594", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #39"}
+{"asctime": "2026-05-16 09:51:28,838", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:51:28,839", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #40"}
+{"asctime": "2026-05-16 09:52:23,920", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:52:23,920", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #41"}
+{"asctime": "2026-05-16 09:53:28,577", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:53:28,577", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #42"}
+{"asctime": "2026-05-16 09:54:19,744", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:54:19,745", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #43"}
+{"asctime": "2026-05-16 09:55:09,999", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:55:10,000", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #44"}
+{"asctime": "2026-05-16 09:56:03,916", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:56:03,917", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #45"}
+{"asctime": "2026-05-16 09:57:14,303", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:57:14,304", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #46"}
+{"asctime": "2026-05-16 09:58:08,190", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:58:08,190", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #47"}
+{"asctime": "2026-05-16 09:59:09,964", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 09:59:09,964", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #48"}
+{"asctime": "2026-05-16 10:00:16,041", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 10:00:16,041", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #49"}
+{"asctime": "2026-05-16 10:01:18,411", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 10:01:18,411", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #50"}
+{"asctime": "2026-05-16 10:02:25,606", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-16 10:02:25,607", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #51"}
+{"asctime": "2026-05-16 10:02:35,603", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed client session\nclient_session: <aiohttp.client.ClientSession object at 0x000001ECAA462660>"}
+{"asctime": "2026-05-26 13:59:43,362", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 13:59:43,362", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 13:59:43,362", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 13:59:47,053", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 13:59:47,053", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 13:59:52,382", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 13:59:52,382", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 14:00:01,929", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:00:01,929", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 14:00:18,406", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:00:18,406", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-26 14:00:56,439", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:00:56,439", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-26 14:01:06,821", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Input/Output] Request cancelled outside pymodbus."}
+{"asctime": "2026-05-26 14:01:06,822", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 14:01:06,822", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-26 14:01:06,824", "name": "pymodbus.logging", "levelname": "WARNING", "message": "ERROR: received pdu without a corresponding request, IGNORING"}
+{"asctime": "2026-05-26 14:04:46,369", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-26 14:04:46,369", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 14:04:46,370", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read input registers"}
+{"asctime": "2026-05-26 14:04:48,436", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-26 14:04:48,437", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-26 14:04:48,438", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-26 14:04:59,114", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Input/Output] Request cancelled outside pymodbus."}
+{"asctime": "2026-05-26 14:04:59,114", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 14:04:59,114", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-26 14:04:59,115", "name": "pymodbus.logging", "levelname": "WARNING", "message": "ERROR: received pdu without a corresponding request, IGNORING"}
+{"asctime": "2026-05-26 14:05:02,393", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed client session\nclient_session: <aiohttp.client.ClientSession object at 0x0000015CC82170E0>"}
+{"asctime": "2026-05-26 14:05:15,792", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:05:15,792", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 14:05:15,792", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 14:05:15,795", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-26 14:05:15,796", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 14:05:15,796", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-26 14:05:15,796", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-26 14:05:15,796", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-26 14:05:19,890", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:05:19,891", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 14:05:26,663", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:05:26,663", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 14:05:37,366", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:05:37,366", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 14:05:54,355", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:05:54,356", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-26 14:06:30,617", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:06:30,617", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-26 14:07:36,469", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:07:36,470", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-26 14:08:09,983", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed connector\nconnections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001B9FA74C350>, 21667.0066638)])']\nconnector: <aiohttp.connector.TCPConnector object at 0x000001B9FA742A50>"}
+{"asctime": "2026-05-26 14:08:18,854", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:08:18,855", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 14:08:18,855", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 14:08:18,858", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-26 14:08:18,858", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 14:08:18,858", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read discrete inputs"}
+{"asctime": "2026-05-26 14:08:18,859", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-26 14:08:18,859", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-26 14:08:22,711", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:08:22,712", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 14:08:28,608", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:08:28,608", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 14:08:39,950", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 14:08:39,950", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 14:08:48,791", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed connector\nconnections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001BB915B3860>, 21706.0478992)])']\nconnector: <aiohttp.connector.TCPConnector object at 0x000001BB91AB2A50>"}
+{"asctime": "2026-05-26 20:01:36,157", "name": "pymodbus.logging", "levelname": "WARNING", "message": "Failed to connect "}
+{"asctime": "2026-05-26 20:01:36,261", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus connect failed: Connection refused"}
+{"asctime": "2026-05-26 20:01:36,261", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 20:01:36,263", "name": "services.runtime_service", "levelname": "ERROR", "message": "Failed initial Modbus connection. Running in degraded mode."}
+{"asctime": "2026-05-26 20:01:38,528", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:01:38,529", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 20:01:38,529", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 20:01:38,530", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-26 20:01:38,530", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-26 20:01:42,364", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:01:42,365", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 20:01:42,384", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed connector\nconnections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x0000029553E08650>, 16606.9091888)])']\nconnector: <aiohttp.connector.TCPConnector object at 0x0000029553DF3230>"}
+{"asctime": "2026-05-26 20:02:23,602", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:02:23,603", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 20:02:23,603", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 20:02:28,042", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:02:28,043", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 20:02:34,362", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:02:34,362", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 20:02:45,130", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:02:45,130", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 20:03:04,559", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:03:04,559", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-26 20:03:34,211", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:03:34,211", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-26 20:03:49,220", "name": "control.state_machine", "levelname": "WARNING", "message": "FSM: Sorter 1 timeout \u2014 forcing reset"}
+{"asctime": "2026-05-26 20:04:34,981", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:04:34,982", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-26 20:05:37,163", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 20:05:37,163", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #7"}
+{"asctime": "2026-05-26 20:06:18,613", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed client session\nclient_session: <aiohttp.client.ClientSession object at 0x00000205FBBD38C0>"}
+{"asctime": "2026-05-26 21:12:12,672", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:12:12,672", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 21:12:12,672", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 21:12:16,692", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:12:16,692", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 21:12:22,604", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:12:22,604", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 21:12:32,441", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:12:32,442", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 21:12:54,233", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: timed out"}
+{"asctime": "2026-05-26 21:12:54,234", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-26 21:13:31,110", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:13:31,111", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-26 21:14:42,687", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:14:42,687", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-26 21:15:13,098", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus read error: Modbus Error: [Input/Output] Request cancelled outside pymodbus."}
+{"asctime": "2026-05-26 21:15:13,098", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 21:15:13,098", "name": "drivers.input_reader", "levelname": "WARNING", "message": "Failed to read input registers"}
+{"asctime": "2026-05-26 21:15:13,099", "name": "pymodbus.logging", "levelname": "WARNING", "message": "ERROR: received pdu without a corresponding request, IGNORING"}
+{"asctime": "2026-05-26 21:15:41,111", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: timed out"}
+{"asctime": "2026-05-26 21:15:41,111", "name": "infrastructure.mqtt.mqtt_rpc_listener", "levelname": "WARNING", "message": "MQTT RPC: initial connect failed \u2014 reconnect loop will retry in background"}
+{"asctime": "2026-05-26 21:15:41,112", "name": "services.runtime_service", "levelname": "WARNING", "message": "Infrastructure: MQTT RPC not connected (reconnect loop active)"}
+{"asctime": "2026-05-26 21:15:41,113", "name": "drivers.modbus_client", "levelname": "ERROR", "message": "Modbus write_register error (attempt 1): Modbus Error: [Connection] Not connected[AsyncModbusTcpClient 192.168.2.49:502]"}
+{"asctime": "2026-05-26 21:15:41,113", "name": "drivers.modbus_client", "levelname": "WARNING", "message": "Modbus entering DEGRADED mode \u2014 reconnect loop starting"}
+{"asctime": "2026-05-26 21:15:41,114", "name": "drivers.output_writer", "levelname": "ERROR", "message": "Failed to write counter register remover2_count"}
+{"asctime": "2026-05-26 21:15:41,114", "name": "drivers.output_writer", "levelname": "ERROR", "message": "Failed to write counter register remover3_count"}
+{"asctime": "2026-05-26 21:15:41,114", "name": "services.alarm_service", "levelname": "WARNING", "message": "Modbus TCP connection lost \u2014 entering degraded mode"}
+{"asctime": "2026-05-26 21:15:41,114", "name": "alarms.alarm_manager", "levelname": "CRITICAL", "message": "ALARM: MODBUS_DISCONNECT - Modbus TCP connection lost \u2014 entering degraded mode (source: ModbusClient)"}
+{"asctime": "2026-05-26 21:15:45,402", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:15:45,403", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #1"}
+{"asctime": "2026-05-26 21:15:50,697", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:15:50,697", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #2"}
+{"asctime": "2026-05-26 21:15:59,761", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:15:59,761", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #3"}
+{"asctime": "2026-05-26 21:16:20,011", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:16:20,018", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #4"}
+{"asctime": "2026-05-26 21:16:53,435", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:16:53,435", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #5"}
+{"asctime": "2026-05-26 21:17:53,176", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "ERROR", "message": "MQTT broker tb-dev.imespro.ai:1883 unreachable: [WinError 10061] No connection could be made because the target machine actively refused it"}
+{"asctime": "2026-05-26 21:17:53,177", "name": "infrastructure.mqtt.tb_mqtt_client", "levelname": "WARNING", "message": "MQTT RPC reconnect failed \u2014 attempt #6"}
+{"asctime": "2026-05-26 21:18:22,928", "name": "asyncio", "levelname": "ERROR", "message": "Unclosed connector\nconnections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001933D0B79D0>, 21209.7779679)])']\nconnector: <aiohttp.connector.TCPConnector object at 0x000001933D603380>"}

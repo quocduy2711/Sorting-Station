@@ -1,0 +1,474 @@
+{
+  "title": "Sorting Station Monitor",
+  "configuration": {
+    "description": "Industrial sorting station dashboard - real-time monitoring",
+    "widgets": [],
+    "states": {
+      "default": {
+        "name": "default",
+        "root": true,
+        "layouts": {
+          "main": {
+            "widgets": {
+              "machine_state_card": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 0,
+                "col": 0
+              },
+              "is_running_led": {
+                "sizeX": 2,
+                "sizeY": 3,
+                "row": 0,
+                "col": 4
+              },
+              "uptime_card": {
+                "sizeX": 6,
+                "sizeY": 3,
+                "row": 0,
+                "col": 6
+              },
+              "remover1_count": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 3,
+                "col": 0
+              },
+              "remover2_count": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 3,
+                "col": 4
+              },
+              "remover3_count": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 3,
+                "col": 8
+              },
+              "vision_product_card": {
+                "sizeX": 6,
+                "sizeY": 3,
+                "row": 6,
+                "col": 0
+              },
+              "vision_ok_led": {
+                "sizeX": 2,
+                "sizeY": 3,
+                "row": 6,
+                "col": 6
+              },
+              "alarm_table": {
+                "sizeX": 8,
+                "sizeY": 4,
+                "row": 9,
+                "col": 0
+              },
+              "error_code_card": {
+                "sizeX": 4,
+                "sizeY": 4,
+                "row": 9,
+                "col": 8
+              },
+              "modbus_status": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 13,
+                "col": 0
+              },
+              "mqtt_status": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 13,
+                "col": 4
+              },
+              "temperature_gauge": {
+                "sizeX": 4,
+                "sizeY": 3,
+                "row": 13,
+                "col": 8
+              }
+            },
+            "gridSettings": {
+              "columns": 12,
+              "margin": 10,
+              "outerMargin": true
+            }
+          }
+        }
+      }
+    },
+    "entityAliases": {
+      "sorting_station": {
+        "id": "sorting_station_alias",
+        "alias": "Sorting Station",
+        "filter": {
+          "type": "singleEntity",
+          "resolveMultiple": false,
+          "singleEntity": {
+            "entityType": "DEVICE",
+            "id": "REPLACE_WITH_DEVICE_ID"
+          }
+        }
+      }
+    },
+    "filters": {}
+  },
+  "widgets": [
+    {
+      "id": "machine_state_card",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Machine State",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "machine_state",
+                "type": "timeseries",
+                "label": "State"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "labelPosition": "top",
+          "layout": "vertical",
+          "showLabel": true,
+          "label": "Machine State",
+          "valueStyle": {
+            "fontSize": "24px",
+            "fontWeight": "bold"
+          },
+          "colorFunction": "if (value === 'RUNNING') return '#4CAF50'; if (value === 'EMERGENCY_STOP') return '#F44336'; if (value === 'ERROR') return '#FF9800'; return '#9E9E9E';"
+        }
+      }
+    },
+    {
+      "id": "is_running_led",
+      "typeFullFqn": "system.indicator",
+      "type": "latest",
+      "title": "Running",
+      "sizeX": 2,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "is_running",
+                "type": "timeseries",
+                "label": "Running"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "initialColor": "#9E9E9E",
+          "onColor": "#4CAF50",
+          "offColor": "#F44336",
+          "showLabel": true,
+          "label": "Motor"
+        }
+      }
+    },
+    {
+      "id": "uptime_card",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Uptime",
+      "sizeX": 6,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "uptime_seconds",
+                "type": "timeseries",
+                "label": "Uptime (s)"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "label": "System Uptime",
+          "showLabel": true,
+          "units": "s"
+        }
+      }
+    },
+    {
+      "id": "remover1_count",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Remover 1",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "remover1_count",
+                "type": "timeseries",
+                "label": "Count"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "label": "Remover 1",
+          "showLabel": true,
+          "valueStyle": {"fontSize": "32px", "fontWeight": "bold", "color": "#2196F3"}
+        }
+      }
+    },
+    {
+      "id": "remover2_count",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Remover 2",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "remover2_count",
+                "type": "timeseries",
+                "label": "Count"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "label": "Remover 2",
+          "showLabel": true,
+          "valueStyle": {"fontSize": "32px", "fontWeight": "bold", "color": "#FF9800"}
+        }
+      }
+    },
+    {
+      "id": "remover3_count",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Remover 3",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {
+                "name": "remover3_count",
+                "type": "timeseries",
+                "label": "Count"
+              }
+            ]
+          }
+        ],
+        "settings": {
+          "label": "Remover 3",
+          "showLabel": true,
+          "valueStyle": {"fontSize": "32px", "fontWeight": "bold", "color": "#4CAF50"}
+        }
+      }
+    },
+    {
+      "id": "vision_product_card",
+      "typeFullFqn": "system.cards.entities_table",
+      "type": "latest",
+      "title": "Vision Sensor",
+      "sizeX": 6,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "vision_product_id", "type": "timeseries", "label": "Product ID"},
+              {"name": "vision_product_shape", "type": "timeseries", "label": "Shape"},
+              {"name": "vision_product_color", "type": "timeseries", "label": "Color"}
+            ]
+          }
+        ],
+        "settings": {
+          "showTitle": true,
+          "title": "Current Product"
+        }
+      }
+    },
+    {
+      "id": "vision_ok_led",
+      "typeFullFqn": "system.indicator",
+      "type": "latest",
+      "title": "Vision OK",
+      "sizeX": 2,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "vision_ok", "type": "timeseries", "label": "Vision"}
+            ]
+          }
+        ],
+        "settings": {
+          "onColor": "#4CAF50",
+          "offColor": "#F44336",
+          "showLabel": true,
+          "label": "Vision"
+        }
+      }
+    },
+    {
+      "id": "alarm_table",
+      "typeFullFqn": "system.alarm_table",
+      "type": "alarm",
+      "title": "Active Alarms",
+      "sizeX": 8,
+      "sizeY": 4,
+      "config": {
+        "alarmFilterConfig": {
+          "statusList": ["ACTIVE_UNACK", "ACTIVE_ACK"],
+          "severityList": ["CRITICAL", "MAJOR", "MINOR", "WARNING"],
+          "searchPropagatedAlarms": false
+        },
+        "settings": {
+          "displayDetails": true,
+          "allowAcknowledgment": true,
+          "allowClear": true,
+          "displayPagination": true,
+          "defaultPageSize": 10
+        }
+      }
+    },
+    {
+      "id": "error_code_card",
+      "typeFullFqn": "system.value_card",
+      "type": "latest",
+      "title": "Error Code",
+      "sizeX": 4,
+      "sizeY": 4,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "error_code", "type": "timeseries", "label": "Error"},
+              {"name": "error_message", "type": "timeseries", "label": "Message"}
+            ]
+          }
+        ],
+        "settings": {
+          "label": "Last Error",
+          "showLabel": true,
+          "valueStyle": {"color": "#F44336"}
+        }
+      }
+    },
+    {
+      "id": "modbus_status",
+      "typeFullFqn": "system.indicator",
+      "type": "latest",
+      "title": "Modbus TCP",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "modbus_connected", "type": "timeseries", "label": "Modbus"}
+            ]
+          }
+        ],
+        "settings": {
+          "onColor": "#4CAF50",
+          "offColor": "#F44336",
+          "showLabel": true,
+          "label": "Modbus TCP"
+        }
+      }
+    },
+    {
+      "id": "mqtt_status",
+      "typeFullFqn": "system.indicator",
+      "type": "latest",
+      "title": "MQTT RPC",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "mqtt_rpc_available", "type": "timeseries", "label": "MQTT RPC"}
+            ]
+          }
+        ],
+        "settings": {
+          "onColor": "#4CAF50",
+          "offColor": "#FF9800",
+          "showLabel": true,
+          "label": "MQTT RPC"
+        }
+      }
+    },
+    {
+      "id": "temperature_gauge",
+      "typeFullFqn": "system.analogue_gauges.radial_gauge",
+      "type": "latest",
+      "title": "Temperature",
+      "sizeX": 4,
+      "sizeY": 3,
+      "config": {
+        "datasources": [
+          {
+            "type": "entity",
+            "entityAliasId": "sorting_station_alias",
+            "dataKeys": [
+              {"name": "temperature_c", "type": "timeseries", "label": "°C"}
+            ]
+          }
+        ],
+        "settings": {
+          "minValue": 0,
+          "maxValue": 80,
+          "showUnitTitle": true,
+          "unitTitle": "°C",
+          "majorTicksCount": 9,
+          "minorTicks": 5,
+          "highlights": [
+            {"from": 0, "to": 40, "color": "#4CAF50"},
+            {"from": 40, "to": 60, "color": "#FF9800"},
+            {"from": 60, "to": 80, "color": "#F44336"}
+          ]
+        }
+      }
+    }
+  ]
+}

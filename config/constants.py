@@ -28,3 +28,18 @@ PRODUCT_MAP: Dict[int, Tuple[str, str]] = {
 
 # Set of valid product IDs
 VALID_PRODUCT_IDS: Set[int] = set(SORT_MAP.keys())
+
+
+# ── Conveyor error detection ─────────────────────────────────────────────────
+# These thresholds control error detector sensitivity.
+# Configurable via environment variables, defaults are conservative.
+
+CONVEYOR_JAM_TIMEOUT_MS: int = int(
+    __import__("os").getenv("CONVEYOR_JAM_TIMEOUT_MS", "5000")
+)
+CONVEYOR_VISION_STALL_TIMEOUT_MS: int = int(
+    __import__("os").getenv("CONVEYOR_VISION_STALL_TIMEOUT_MS", "3000")
+)
+CONVEYOR_SUDDEN_STOP_DEBOUNCE_MS: int = int(
+    __import__("os").getenv("CONVEYOR_SUDDEN_STOP_DEBOUNCE_MS", "500")
+)

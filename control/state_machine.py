@@ -185,6 +185,7 @@ class StateMachine:
         """
         Luồng 4: Cảm biến at_exit phát hiện sản phẩm đã vào remover.
 
+        - Tăng remover counter tương ứng
         - Tắt sorter tương ứng
         - Reset trạng thái product_in_flight
         - Luồng 1: pulse emitter để sinh sản phẩm mới
@@ -194,6 +195,16 @@ class StateMachine:
 
         sorter_id = self._active_sorter
         logger.info(f"FSM: at_exit triggered — product in remover, resetting sorter {sorter_id}")
+
+        # ── Tăng counter cho remover tương ứng ──────────────────────
+        self.system_state.increment_remover(sorter_id)
+        self.system_state.total_products += 1
+        self.system_state.successful_sorts += 1
+        logger.info(
+            f"FSM: Remover {sorter_id} count → "
+            f"{self.system_state.remover_counts[sorter_id]} "
+            f"(total={self.system_state.total_products})"
+        )
 
         await self._reset_sorter(sorter_id)
 

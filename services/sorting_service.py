@@ -44,6 +44,7 @@ class SortingService:
         """Subscribe to relevant events."""
         self._em.subscribe(SystemEvent.PRODUCT_DETECTED, self._on_product_detected)
         self._em.subscribe(SystemEvent.PRODUCT_SORT_DONE, self._on_sort_done)
+        self._em.subscribe(SystemEvent.AT_EXIT_TRIGGERED, self._on_at_exit)
         logger.info("SortingService handlers registered")
 
     async def _on_product_detected(self, event: Event) -> None:
@@ -119,3 +120,34 @@ class SortingService:
         """Handle product successfully sorted."""
         self._tracker.complete_product()
         logger.info("SortingService: product sort complete")
+
+    async def _on_at_exit(self, event: Event) -> None:
+        """Handle product reaching exit sensor — increment remover counter.
+
+        RULE: Only count when there's an active product with a known target_sorter.
+        RULE: Counter increment is idempotent per product lifecycle
+              (product is completed after this, preventing double-count).
+        RULE: Write counter to Modbus immediately after increment.
+        """
+        product = self._tracker.get_current_product()
+        if product and hasattr(product, 'target_sorter') and product.target_sorter > 0:
+            sorter_id = product.target_sorter
+            
+            # Increment local counter
+            self._tracker.on_product_dropped(sorter_id)
+            
+            # Get updated count from system state
+            system_state = self._ctx.state.system_state
+            new_count = system_state.remover_counts.get(sorter_id, 0) if system_state else 0
+            
+            # Write counter to Modbus for Factory IO display
+            output_writer = self._ctx.output_writer
+            if output_writer:
+                await output_writer.write_counter(sorter_id, new_count)
+            
+            logger.info(
+                f"SortingService: product {product.uid} dropped into "
+                f"remover {sorter_id} (count={new_count})"
+            )
+        else:
+            logger.debug("AT_EXIT_TRIGGERED but no active product with target_sorter")

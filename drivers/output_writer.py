@@ -1,9 +1,10 @@
 """
-Output writer for Modbus coil writes.
+Output writer for Modbus coil writes and holding register writes.
 
 RULE: Only modifies OutputState buffer, never writes directly.
 RULE: Shadow state comparison to reduce Modbus traffic.
 RULE: output_writer.flush() is the ONLY place that writes coils.
+RULE: Counter registers are written immediately on update.
 """
 import logging
 from typing import Dict
@@ -17,11 +18,13 @@ logger = logging.getLogger(__name__)
 class OutputWriter:
     """
     Manages all Modbus coil writes through OutputState buffer.
+    Also handles holding register writes for counter values.
     
     Features:
     - Shadow state comparison (only write if changed)
     - Centralized output control
     - Reduced Modbus traffic
+    - Counter register writes
     """
 
     # Modbus coil addresses (example mapping)
@@ -44,12 +47,25 @@ class OutputWriter:
         "reset_light": 15,
     }
 
+    # Modbus holding register addresses for counters
+    # Adjust these addresses based on your Factory IO configuration
+    REGISTER_MAP: Dict[str, int] = {
+        "remover1_count": 100,  # Holding register 100
+        "remover2_count": 101,  # Holding register 101
+        "remover3_count": 102,  # Holding register 102
+    }
+
     def __init__(self, modbus: ModbusClient, output_state: OutputState):
         """Initialize output writer."""
         self.modbus = modbus
         self.output_state = output_state
         self.write_count = 0
         self.skip_count = 0  # Coils skipped due to shadow match
+        self._last_counter_values: Dict[str, int] = {
+            "remover1_count": -1,
+            "remover2_count": -1,
+            "remover3_count": -1,
+        }
 
     async def flush(self) -> bool:
         """
@@ -126,6 +142,64 @@ class OutputWriter:
         
         # Force write
         await self.write_all_coils()
+
+    async def write_counter(self, remover_id: int, count: int) -> bool:
+        """
+        Write a single remover counter to Modbus holding register.
+
+        Args:
+            remover_id: Remover ID (1, 2, or 3)
+            count: Counter value to write
+
+        Returns:
+            True if successful.
+        """
+        if remover_id not in (1, 2, 3):
+            logger.error(f"Invalid remover_id: {remover_id}")
+            return False
+
+        reg_name = f"remover{remover_id}_count"
+        
+        if reg_name not in self.REGISTER_MAP:
+            logger.warning(f"No register mapping for {reg_name}")
+            return False
+
+        address = self.REGISTER_MAP[reg_name]
+        
+        # Only write if value changed (shadow comparison)
+        if self._last_counter_values.get(reg_name) == count:
+            return True  # Skip write, value unchanged
+
+        success = await self.modbus.write_register(address, count, retries=1)
+
+        if success:
+            logger.debug(f"Wrote counter register {reg_name} (addr {address}) = {count}")
+            self._last_counter_values[reg_name] = count
+            self.write_count += 1
+        else:
+            logger.error(f"Failed to write counter register {reg_name}")
+
+        return success
+
+    async def write_all_counters(self, counter_dict: Dict[int, int]) -> bool:
+        """
+        Write all remover counters to Modbus holding registers.
+
+        Args:
+            counter_dict: Dictionary mapping remover_id (1,2,3) to counts
+
+        Returns:
+            True if all writes successful.
+        """
+        all_success = True
+
+        for remover_id in (1, 2, 3):
+            count = counter_dict.get(remover_id, 0)
+            success = await self.write_counter(remover_id, count)
+            if not success:
+                all_success = False
+
+        return all_success
 
     def get_write_count(self) -> int:
         """Get total coils written."""

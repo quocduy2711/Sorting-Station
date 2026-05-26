@@ -1,9 +1,11 @@
 """
 System-level state and operation tracking.
+
+RULE: Protected by asyncio.Lock()
 """
 from enum import Enum
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Dict, Optional
 import time
 
 
@@ -28,30 +30,36 @@ class SystemStateEnum(Enum):
 class SystemState:
     """
     Tracks overall system state and cycle metrics.
-    
+
     RULE: Protected by asyncio.Lock()
     """
     state: SystemStateEnum = SystemStateEnum.IDLE
     state_changed_at: float = field(default_factory=time.monotonic)
-    
-    # Metrics
+
+    # Metrics (internal — NOT all sent in telemetry)
     total_products: int = 0
     successful_sorts: int = 0
     failed_sorts: int = 0
     alarm_count: int = 0
-    
+
+    # Per-remover counters
+    remover_counts: Dict[int, int] = field(
+        default_factory=lambda: {1: 0, 2: 0, 3: 0}
+    )
+
     # Timing
     scan_cycle_ms: float = 0.0
     last_scan_duration_ms: float = 0.0
-    
+
     # Connectivity
     modbus_connected: bool = False
-    mqtt_connected: bool = False
-    
+    mqtt_rpc_available: bool = False
+    http_transport_ok: bool = True
+
     # Error tracking
     last_error: Optional[str] = None
     last_error_time: Optional[float] = None
-    
+
     # Operational time
     startup_time: float = field(default_factory=time.monotonic)
 
@@ -81,8 +89,21 @@ class SystemState:
             return 0.0
         return (self.successful_sorts / total) * 100
 
+    def increment_remover(self, remover_id: int) -> None:
+        """Increment counter when product drops into remover.
+
+        RULE: Only call when Modbus confirms actual drop event.
+        """
+        if remover_id in self.remover_counts:
+            self.remover_counts[remover_id] += 1
+
+    def reset_remover_counts(self) -> None:
+        """Reset all remover counters to 0."""
+        self.remover_counts = {1: 0, 2: 0, 3: 0}
+
     def __repr__(self) -> str:
         return (f"SystemState({self.state.value}, "
                 f"products={self.total_products}, "
                 f"success={self.successful_sorts}/{self.failed_sorts}, "
+                f"removers={self.remover_counts}, "
                 f"alarms={self.alarm_count})")

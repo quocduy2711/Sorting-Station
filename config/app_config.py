@@ -55,7 +55,7 @@ class ModbusConfig:
 
 @dataclass(frozen=True)
 class MQTTConfig:
-    """MQTT client settings for ThingsBoard."""
+    """MQTT client settings (kept for compatibility, but populated from TB settings)."""
     host: str
     port: int
     username: str
@@ -63,6 +63,21 @@ class MQTTConfig:
     access_token: str
     ca_certs: str
     clean_session: bool
+
+
+@dataclass(frozen=True)
+class ThingsBoardConfig:
+    """ThingsBoard server and device settings."""
+    host: str
+    http_port: int
+    mqtt_port: int
+    device_name: str
+    station_id: str
+    access_token: str
+    use_provisioning: bool
+    provision_key: str
+    provision_secret: str
+    lwt_topic: str
 
 
 @dataclass(frozen=True)
@@ -100,12 +115,39 @@ class ReconnectConfig:
 
 
 @dataclass(frozen=True)
+class HttpTransportConfig:
+    """HTTP transport pipeline configuration."""
+    timeout_s: float
+    max_retries: int
+    batch_window_s: float
+    max_batch_size: int
+    max_queue_size: int
+    spool_db_path: str
+    max_spool_size: int
+    retry_check_interval_s: float
+    circuit_breaker_threshold: int
+    circuit_breaker_reset_s: float
+    heartbeat_interval_s: float
+    shared_attr_poll_interval_s: float
+
+
+@dataclass(frozen=True)
 class LoggingConfig:
     """Logging configuration."""
     level: str
     log_dir: str
     max_bytes: int
     backup_count: int
+
+
+@dataclass(frozen=True)
+class SerialConfig:
+    """Serial bridge configuration for ESP32 gateway.
+
+    RULE: If serial_port is None → SerialBridge is disabled.
+    """
+    serial_port: str | None   # None = disabled (no SERIAL_ENABLED flag needed)
+    baud_rate: int
 
 
 @dataclass(frozen=True)
@@ -117,9 +159,12 @@ class AppConfig:
     """
     modbus: ModbusConfig
     mqtt: MQTTConfig
+    thingsboard: ThingsBoardConfig
     timing: TimingConfig
     timeout: TimeoutConfig
     reconnect: ReconnectConfig
+    http_transport: HttpTransportConfig
+    serial: SerialConfig
     logging: LoggingConfig
 
 
@@ -143,12 +188,33 @@ def load_config() -> AppConfig:
         max_retries=_get_int("MODBUS_MAX_RETRIES", 3),
     )
 
+    tb_host = _get_str("TB_HOST", "127.0.0.1")
+    # IMPORTANT: tb-dev.imespro.ai uses a non-standard MQTT port.
+    # Run tools/probe_mqtt_port.py to discover it, then set in .env:
+    #   TB_MQTT_PORT=<port>
+    #   MQTT_PORT=<port>
+    tb_mqtt_port = int(os.getenv("MQTT_PORT", os.getenv("TB_MQTT_PORT", "1883")))
+    tb_token = _get_str("TB_DEVICE_TOKEN", "")
+
+    thingsboard = ThingsBoardConfig(
+        host=tb_host,
+        http_port=_get_int("TB_HTTP_PORT", 58090),
+        mqtt_port=tb_mqtt_port,
+        device_name=_get_str("TB_DEVICE_NAME", "sorting-station-01"),
+        station_id=_get_str("TB_STATION_ID", "SS-01"),
+        access_token=tb_token,
+        use_provisioning=_get_bool("TB_USE_PROVISIONING", False),
+        provision_key=_get_str("TB_PROVISION_KEY", ""),
+        provision_secret=_get_str("TB_PROVISION_SECRET", ""),
+        lwt_topic="v1/devices/me/telemetry",
+    )
+
     mqtt = MQTTConfig(
-        host=_get_str("MQTT_HOST", "127.0.0.1"),
-        port=_get_int("MQTT_PORT", 1883),
+        host=_get_str("MQTT_HOST", tb_host),
+        port=_get_int("MQTT_PORT", tb_mqtt_port),
         username=_get_str("MQTT_USERNAME", ""),
         password=_get_str("MQTT_PASSWORD", ""),
-        access_token=_get_str("MQTT_ACCESS_TOKEN", ""),
+        access_token=_get_str("MQTT_ACCESS_TOKEN", tb_token),
         ca_certs=_get_str("MQTT_TLS_CA_CERTS", ""),
         clean_session=_get_bool("MQTT_CLEAN_SESSION", True),
     )
@@ -181,6 +247,21 @@ def load_config() -> AppConfig:
         mqtt_offline_buffer_size=_get_int("MQTT_OFFLINE_BUFFER_SIZE", 500),
     )
 
+    http_transport = HttpTransportConfig(
+        timeout_s=_get_float("HTTP_TIMEOUT_S", 5.0),
+        max_retries=_get_int("HTTP_MAX_RETRIES", 5),
+        batch_window_s=_get_float("TELEMETRY_BATCH_WINDOW_S", 1.0),
+        max_batch_size=_get_int("TELEMETRY_MAX_BATCH_SIZE", 20),
+        max_queue_size=_get_int("TELEMETRY_MAX_QUEUE_SIZE", 1000),
+        spool_db_path=_get_str("TELEMETRY_SPOOL_DB", "data/telemetry_spool.db"),
+        max_spool_size=_get_int("TELEMETRY_MAX_SPOOL_SIZE", 10000),
+        retry_check_interval_s=_get_float("TELEMETRY_RETRY_INTERVAL_S", 5.0),
+        circuit_breaker_threshold=_get_int("HTTP_CB_THRESHOLD", 5),
+        circuit_breaker_reset_s=_get_float("HTTP_CB_RESET_S", 30.0),
+        heartbeat_interval_s=_get_float("HEARTBEAT_INTERVAL_S", 30.0),
+        shared_attr_poll_interval_s=_get_float("SHARED_ATTR_POLL_S", 60.0),
+    )
+
     logging_cfg = LoggingConfig(
         level=_get_str("LOG_LEVEL", "INFO"),
         log_dir=_get_str("LOG_DIR", "logs"),
@@ -188,11 +269,20 @@ def load_config() -> AppConfig:
         backup_count=_get_int("LOG_BACKUP_COUNT", 5),
     )
 
+    serial_port_raw = _get_str("SERIAL_PORT", "")
+    serial = SerialConfig(
+        serial_port=serial_port_raw if serial_port_raw else None,
+        baud_rate=_get_int("SERIAL_BAUD", 115200),
+    )
+
     return AppConfig(
         modbus=modbus,
         mqtt=mqtt,
+        thingsboard=thingsboard,
         timing=timing,
         timeout=timeout,
         reconnect=reconnect,
+        http_transport=http_transport,
+        serial=serial,
         logging=logging_cfg,
     )

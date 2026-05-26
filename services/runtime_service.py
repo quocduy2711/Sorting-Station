@@ -5,7 +5,11 @@ Responsibilities:
 - Main control loop (scan cycle) running at IO_SCAN_MS
 - Coordinates: Read Inputs → Event Bus → FSM → Write Outputs
 - Watchdog heartbeat
-- Graceful shutdown
+- Graceful shutdown with ordered teardown
+- Infrastructure lifecycle (start/stop transport adapters)
+
+RULE: Infrastructure failures MUST NOT crash the control loop.
+RULE: Control loop continues even if all transports are down.
 """
 from __future__ import annotations
 
@@ -18,7 +22,7 @@ from control.event_manager import SystemEvent
 from models.system_state import SystemStateEnum
 
 if TYPE_CHECKING:
-    from config.runtime_context import RuntimeContext
+    from config.runtime_context import ApplicationContext
 
 logger = logging.getLogger(__name__)
 
@@ -26,56 +30,115 @@ logger = logging.getLogger(__name__)
 class RuntimeEngine:
     """
     The main industrial control engine.
+
+    Startup order:
+        1. Modbus connect
+        2. Infrastructure start (HTTP telemetry, MQTT RPC, attributes, health)
+        3. Register event handlers
+        4. Start event dispatcher
+        5. Start telemetry loop
+        6. Enter scan cycle
+
+    Shutdown order (reverse):
+        1. Stop FSM (transition to STOPPED)
+        2. Flush outputs
+        3. Stop telemetry service
+        4. Stop infrastructure (HTTP, MQTT, spool)
+        5. Disconnect Modbus
     """
 
-    def __init__(self, ctx: "RuntimeContext") -> None:
+    def __init__(self, ctx: "ApplicationContext") -> None:
         self._ctx = ctx
         self._interval_s: float = ctx.config.timing.io_scan_ms / 1000.0
         self._running: bool = False
-        
+
         # Button edge tracking (Stop và E-Stop là Normally Closed)
         self._last_start = False
         self._last_stop = True
         self._last_estop = True
         self._last_at_exit = False  # at_exit là Normally Open
 
+        # Error detector tracking state
+        self._last_position_change_time: float = 0.0   # monotonic
+        self._last_vision_read_time: float = 0.0        # monotonic
+        self._last_vision_id: int = 0                    # previous vision_id
+        self._last_at_exit_state: bool = False            # track position changes
+
     async def initialize(self) -> bool:
         """Initialize and connect subsystems."""
         logger.info("Initializing RuntimeEngine...")
         ctx = self._ctx
 
-        # Modbus
+        # 1. Modbus
         if ctx.modbus:
             connected = await ctx.modbus.connect()
             if not connected:
                 logger.error("Failed initial Modbus connection. Running in degraded mode.")
-                # We don't fail initialize() completely, Modbus reconnect loop handles it.
-            
-            # Start reconnect loop just in case
             ctx.modbus.ensure_reconnect_loop()
 
-        # MQTT
-        if ctx.mqtt:
-            mqtt_connected = await ctx.mqtt.connect()
-            if not mqtt_connected:
-                logger.error("Failed initial MQTT connection. Running with offline buffering.")
-            
-            ctx.mqtt.ensure_reconnect_loop()
+        # 2. Infrastructure — HTTP transport (telemetry, attributes, health)
+        infra = ctx.infrastructure
 
-        # Register event handlers
+        if infra.telemetry:
+            try:
+                await infra.telemetry.start()
+                logger.info("Infrastructure: telemetry publisher started")
+            except Exception as exc:
+                logger.error(f"Infrastructure: telemetry start failed: {exc}")
+
+        if infra.attributes:
+            try:
+                await infra.attributes.start()
+                logger.info("Infrastructure: attribute publisher started")
+            except Exception as exc:
+                logger.error(f"Infrastructure: attributes start failed: {exc}")
+
+        if infra.health:
+            try:
+                hb_interval = ctx.config.http_transport.heartbeat_interval_s
+                await infra.health.start(interval_s=hb_interval)
+                logger.info("Infrastructure: health reporter started")
+            except Exception as exc:
+                logger.error(f"Infrastructure: health start failed: {exc}")
+
+        # 3. Infrastructure — MQTT RPC (isolated from HTTP)
+        if infra.rpc:
+            try:
+                rpc_connected = await infra.rpc.start()
+                if rpc_connected:
+                    logger.info("Infrastructure: MQTT RPC listener connected")
+                else:
+                    logger.warning(
+                        "Infrastructure: MQTT RPC not connected "
+                        "(reconnect loop active)"
+                    )
+            except Exception as exc:
+                logger.error(f"Infrastructure: MQTT RPC start failed: {exc}")
+
+        # 4. Register event handlers
         if ctx.state_machine:
             ctx.state_machine.register_handlers(ctx.event_manager)
-        if ctx.telemetry_service:
-            ctx.telemetry_service.register_handlers()
-        if ctx.alarm_service:
-            ctx.alarm_service.register_handlers()
+        if hasattr(ctx, '_telemetry_service') and ctx._telemetry_service:
+            ctx._telemetry_service.register_handlers()
+        if hasattr(ctx, '_alarm_service') and ctx._alarm_service:
+            ctx._alarm_service.register_handlers()
 
-        # Start event dispatcher
+        # 5. Initialize counter values in Modbus
+        if ctx.output_writer and ctx.state.system_state:
+            try:
+                await ctx.output_writer.write_all_counters(
+                    ctx.state.system_state.remover_counts
+                )
+                logger.info("Initialized remover counters to Modbus")
+            except Exception as exc:
+                logger.warning(f"Failed to initialize counters: {exc}")
+
+        # 6. Start event dispatcher
         asyncio.create_task(ctx.event_manager.dispatch_loop(), name="event_dispatcher")
 
-        # Start telemetry loop
-        if ctx.telemetry_service:
-            asyncio.create_task(ctx.telemetry_service.run(), name="telemetry_loop")
+        # 7. Start telemetry loop
+        if hasattr(ctx, '_telemetry_service') and ctx._telemetry_service:
+            asyncio.create_task(ctx._telemetry_service.run(), name="telemetry_loop")
 
         return True
 
@@ -126,9 +189,11 @@ class RuntimeEngine:
                         self._last_start = snapshot.start_button
                         self._last_stop = snapshot.stop_button
                         self._last_estop = snapshot.estop
-                
+
+                        # ── Error Detection ──────────────────────────
+                        await self._run_error_checks(snapshot)
+
                 # 2. Logic (Events are handled by background dispatch loop)
-                # But we can tick timers or FSM if needed here
                 if ctx.timer_manager:
                     ctx.timer_manager.check_all_timers()
 
@@ -138,10 +203,10 @@ class RuntimeEngine:
 
                 # 4. Metrics & Health
                 elapsed = time.monotonic() - start_time
-                if ctx.runtime_metrics:
-                    ctx.runtime_metrics.record_scan_cycle(elapsed * 1000.0)
-                if ctx.health_monitor:
-                    ctx.health_monitor.heartbeat_scan()
+                if ctx.state.metrics:
+                    ctx.state.metrics.record_scan_cycle(elapsed * 1000.0)
+                if ctx.state.health_monitor:
+                    ctx.state.health_monitor.heartbeat_scan()
                 if ctx.watchdog:
                     ctx.watchdog.heartbeat("scan_loop")
 
@@ -156,39 +221,131 @@ class RuntimeEngine:
             await self.shutdown()
 
     async def shutdown(self) -> None:
-        """Gracefully stop and disconnect everything."""
+        """Gracefully stop and disconnect everything (reverse startup order)."""
         if not self._running:
             return
-            
+
         logger.info("Shutting down RuntimeEngine...")
         self._running = False
         ctx = self._ctx
 
-        # Try to failsafe shutdown FSM and outputs
+        # 1. Failsafe FSM shutdown
         if ctx.state_machine:
             try:
                 await ctx.state_machine.transition_to(SystemStateEnum.STOPPED)
             except Exception as e:
                 logger.error(f"Error during FSM shutdown: {e}")
 
+        # 2. Flush outputs
         if ctx.output_writer and ctx.modbus and ctx.modbus.is_connected():
             try:
                 await ctx.output_writer.flush()
             except Exception as e:
                 logger.error(f"Error during output flush on shutdown: {e}")
 
-        # Stop telemetry
-        if ctx.telemetry_service:
-            ctx.telemetry_service.stop()
+        # 3. Stop telemetry service
+        if hasattr(ctx, '_telemetry_service') and ctx._telemetry_service:
+            ctx._telemetry_service.stop()
 
-        # Disconnect drivers
-        if ctx.mqtt:
-            await ctx.mqtt.disconnect()
+        # 4. Stop infrastructure (ordered: health → attributes → RPC → telemetry)
+        infra = ctx.infrastructure
+
+        if infra.health:
+            try:
+                await infra.health.stop()
+            except Exception as e:
+                logger.error(f"Health reporter shutdown error: {e}")
+
+        if infra.attributes:
+            try:
+                await infra.attributes.stop()
+            except Exception as e:
+                logger.error(f"Attribute publisher shutdown error: {e}")
+
+        if infra.rpc:
+            try:
+                await infra.rpc.stop()
+            except Exception as e:
+                logger.error(f"MQTT RPC shutdown error: {e}")
+
+        if infra.telemetry:
+            try:
+                await infra.telemetry.stop()
+            except Exception as e:
+                logger.error(f"Telemetry publisher shutdown error: {e}")
+
+        # 5. Disconnect Modbus
         if ctx.modbus:
             await ctx.modbus.disconnect()
 
         logger.info("RuntimeEngine shutdown complete")
 
+    # ── Error Detection Helpers ───────────────────────────────────────────
+
+    async def _run_error_checks(self, snapshot) -> None:
+        """Run all error detection checks for current scan cycle.
+
+        Called each scan cycle after reading inputs.
+        RULE: Each check is independent — one failure doesn't skip others.
+        """
+        ctx = self._ctx
+        detector = ctx.error_detector
+        if not detector:
+            return
+
+        now = time.monotonic()
+
+        # Track position changes (vision_id changes or at_exit transition = movement)
+        position_changed = False
+        if snapshot.vision_id != self._last_vision_id:
+            position_changed = True
+            self._last_vision_id = snapshot.vision_id
+            if snapshot.vision_id != 0:
+                self._last_vision_read_time = now
+
+        if snapshot.at_exit != self._last_at_exit_state:
+            position_changed = True
+            self._last_at_exit_state = snapshot.at_exit
+
+        if position_changed:
+            self._last_position_change_time = now
+
+        # Initialize tracking on first scan
+        if self._last_position_change_time == 0.0:
+            self._last_position_change_time = now
+
+        # 1. Sudden stop: conveyor motor OFF while FSM says RUNNING
+        #    Motor running state comes from OutputState (software intent)
+        motor_running = ctx.state.output_state.entry_conveyor if ctx.state.output_state else False
+        try:
+            await detector.check_sudden_stop(motor_running=motor_running)
+        except Exception as exc:
+            logger.error(f"Error in check_sudden_stop: {exc}")
+
+        # 2. Jam detection: product stuck at same position too long
+        #    Only check when there's an active product
+        if ctx.product_tracker and ctx.product_tracker.has_active_product():
+            position_unchanged_ms = (now - self._last_position_change_time) * 1000
+            try:
+                await detector.check_jam(
+                    product_position_unchanged_ms=position_unchanged_ms
+                )
+            except Exception as exc:
+                logger.error(f"Error in check_jam: {exc}")
+
+        # 3. Vision stall: vision read product but no downstream movement
+        if self._last_vision_read_time > 0.0 and self._last_vision_id != 0:
+            time_since_vision_ms = (now - self._last_vision_read_time) * 1000
+            try:
+                await detector.check_vision_stall(
+                    vision_product_id=self._last_vision_id,
+                    time_since_vision_read_ms=time_since_vision_ms,
+                    product_moved=snapshot.at_exit,
+                )
+            except Exception as exc:
+                logger.error(f"Error in check_vision_stall: {exc}")
+
+
 class RuntimeService(RuntimeEngine):
-    """Alias for backwards compatibility if needed, or structured access."""
+    """Alias for backwards compatibility."""
     pass

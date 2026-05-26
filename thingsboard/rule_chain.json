@@ -1,0 +1,223 @@
+{
+  "ruleChain": {
+    "name": "Sorting Station — Main",
+    "type": "CORE",
+    "firstRuleNodeId": "msg_type_switch_node",
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "id": "msg_type_switch_node",
+        "additionalInfo": {"description": "Route messages by type: POST_TELEMETRY_REQUEST, POST_ATTRIBUTES_REQUEST"},
+        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
+        "name": "Message Type Switch",
+        "configuration": {},
+        "debugMode": false
+      },
+      {
+        "id": "save_timeseries_node",
+        "additionalInfo": {"description": "Save all telemetry keys to timeseries"},
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Save Timeseries",
+        "configuration": {
+          "defaultTTL": 0,
+          "skipLatestPersistence": false
+        },
+        "debugMode": false
+      },
+      {
+        "id": "save_attributes_node",
+        "additionalInfo": {"description": "Save client/shared attributes"},
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Save Attributes",
+        "configuration": {
+          "scope": "CLIENT_SCOPE"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "check_emergency_stop_node",
+        "additionalInfo": {"description": "Check if machine_state == EMERGENCY_STOP"},
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Emergency Stop",
+        "configuration": {
+          "jsScript": "return msg.machine_state === 'EMERGENCY_STOP';"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "check_error_state_node",
+        "additionalInfo": {"description": "Check if machine_state == ERROR"},
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Error State",
+        "configuration": {
+          "jsScript": "return msg.machine_state === 'ERROR';"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "check_error_code_node",
+        "additionalInfo": {"description": "Check if error_code field exists in telemetry"},
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Error Code",
+        "configuration": {
+          "jsScript": "return msg.error_code !== undefined && msg.error_code !== null && msg.error_code !== '';"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "check_jam_stall_node",
+        "additionalInfo": {"description": "Check jam/stall: is_running=false but state=RUNNING"},
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Jam or Stall",
+        "configuration": {
+          "jsScript": "return msg.is_running === false && msg.machine_state === 'RUNNING';"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "create_alarm_emergency_node",
+        "additionalInfo": {"description": "Create CRITICAL alarm for emergency stop"},
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Alarm: EMERGENCY_STOP",
+        "configuration": {
+          "alarmType": "EMERGENCY_STOP",
+          "severity": "CRITICAL",
+          "alarmDetailsBuildJs": "var details = {}; details.machine_state = msg.machine_state; details.source = 'Rule Chain'; return details;",
+          "useMessageAlarmData": false,
+          "propagate": true
+        },
+        "debugMode": false
+      },
+      {
+        "id": "create_alarm_error_node",
+        "additionalInfo": {"description": "Create MAJOR alarm for system error"},
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Alarm: SYSTEM_ERROR",
+        "configuration": {
+          "alarmType": "SYSTEM_ERROR",
+          "severity": "MAJOR",
+          "alarmDetailsBuildJs": "var details = {}; details.machine_state = msg.machine_state; details.error_code = msg.error_code || 'UNKNOWN'; details.error_message = msg.error_message || ''; return details;",
+          "useMessageAlarmData": false,
+          "propagate": true
+        },
+        "debugMode": false
+      },
+      {
+        "id": "create_alarm_error_code_node",
+        "additionalInfo": {"description": "Create alarm from error_code field"},
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Alarm: Error Code",
+        "configuration": {
+          "alarmType": "${error_code}",
+          "severity": "MAJOR",
+          "alarmDetailsBuildJs": "var details = {}; details.error_code = msg.error_code; details.error_message = msg.error_message; details.machine_state = msg.machine_state; return details;",
+          "useMessageAlarmData": false,
+          "propagate": true
+        },
+        "debugMode": false
+      },
+      {
+        "id": "create_alarm_jam_node",
+        "additionalInfo": {"description": "Create MAJOR alarm for jam/stall"},
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Alarm: JAM_OR_STALL",
+        "configuration": {
+          "alarmType": "JAM_OR_STALL",
+          "severity": "MAJOR",
+          "alarmDetailsBuildJs": "var details = {}; details.machine_state = msg.machine_state; details.is_running = msg.is_running; return details;",
+          "useMessageAlarmData": false,
+          "propagate": true
+        },
+        "debugMode": false
+      },
+      {
+        "id": "clear_alarms_node",
+        "additionalInfo": {"description": "Clear alarms when machine returns to RUNNING state normally"},
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Alarms",
+        "configuration": {
+          "alarmType": "EMERGENCY_STOP",
+          "alarmDetailsBuildJs": "var details = {}; details.cleared_by = 'Rule Chain'; details.machine_state = msg.machine_state; return details;"
+        },
+        "debugMode": false
+      },
+      {
+        "id": "check_running_normal_node",
+        "additionalInfo": {"description": "Check if system is running normally (for alarm clearing)"},
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Running Normal",
+        "configuration": {
+          "jsScript": "return msg.machine_state === 'RUNNING' && msg.is_running === true && (msg.error_code === undefined || msg.error_code === null || msg.error_code === '');"
+        },
+        "debugMode": false
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 2,
+        "type": "Post attributes"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 7,
+        "type": "True"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 8,
+        "type": "True"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 9,
+        "type": "True"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 10,
+        "type": "True"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 11,
+        "type": "True"
+      }
+    ]
+  }
+}

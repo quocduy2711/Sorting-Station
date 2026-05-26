@@ -97,7 +97,7 @@ class HealthMonitor:
 
         # External status flags (set by drivers on connect/disconnect)
         self._modbus_connected: bool = False
-        self._mqtt_connected: bool = False
+        self._mqtt_rpc_available: bool = False
         self._watchdog_ok: bool = True
 
         # Timestamps
@@ -109,8 +109,9 @@ class HealthMonitor:
     def set_modbus_connected(self, connected: bool) -> None:
         self._modbus_connected = connected
 
-    def set_mqtt_connected(self, connected: bool) -> None:
-        self._mqtt_connected = connected
+    def set_mqtt_rpc_available(self, connected: bool) -> None:
+        """Set MQTT RPC connection status."""
+        self._mqtt_rpc_available = connected
 
     def set_watchdog_ok(self, ok: bool) -> None:
         self._watchdog_ok = ok
@@ -145,12 +146,12 @@ class HealthMonitor:
         )
 
         # ── MQTT ─────────────────────────────────────────────────────────
-        mqtt_status = HealthStatus.OK if self._mqtt_connected else HealthStatus.DEGRADED
+        mqtt_status = HealthStatus.OK if self._mqtt_rpc_available else HealthStatus.DEGRADED
         components["mqtt"] = ComponentHealth(
             name="mqtt",
             status=mqtt_status,
-            message="Connected" if self._mqtt_connected else "Disconnected — buffering offline",
-            last_ok_at=now if self._mqtt_connected else 0.0,
+            message="Connected" if self._mqtt_rpc_available else "Disconnected — buffering offline",
+            last_ok_at=now if self._mqtt_rpc_available else 0.0,
         )
 
         # ── Scan Loop ────────────────────────────────────────────────────

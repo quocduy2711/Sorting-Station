@@ -45,6 +45,8 @@ class SystemEvent(Enum):
     ESTOP_CLEARED        = "ESTOP_CLEARED"
     MODE_CHANGED         = "MODE_CHANGED"
     SYSTEM_RESET         = "SYSTEM_RESET"
+    ALARM_CLEARED        = "ALARM_CLEARED"
+    RPC_COMMAND_RECEIVED = "RPC_COMMAND_RECEIVED"
 
     # FSM transitions
     FSM_STATE_CHANGED    = "FSM_STATE_CHANGED"
@@ -59,6 +61,12 @@ class SystemEvent(Enum):
     MODBUS_RECONNECTED   = "MODBUS_RECONNECTED"
     MQTT_DISCONNECTED    = "MQTT_DISCONNECTED"
     MQTT_RECONNECTED     = "MQTT_RECONNECTED"
+
+    # Per-remover counting
+    PRODUCT_SORTED       = "PRODUCT_SORTED"          # Product dropped into remover
+
+    # Error detection
+    EMERGENCY_STOP_DETECTED = "EMERGENCY_STOP_DETECTED"  # Conveyor error detector triggered
 
 
 # ── Event dataclass ───────────────────────────────────────────────────────────
